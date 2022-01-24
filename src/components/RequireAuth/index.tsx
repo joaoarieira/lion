@@ -9,8 +9,6 @@ export function RequireAuth({ children }: IRequireAuthProps): JSX.Element {
   const { authenticated } = useAuth();
   const location = useLocation();
 
-  console.log(authenticated);
-
   if (!authenticated) {
     return <Navigate to="/signin" state={{ from: location }} replace />;
   }
