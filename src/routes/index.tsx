@@ -1,8 +1,10 @@
 import { lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { RequireAuth } from '../components/RequireAuth';
+import { Campuses } from '../modules/Campuses';
+import { Programs } from '../modules/Programs';
 
-const Home = lazy(() => import('../modules/Home'));
+const Home = lazy(() => import('../pages/Home'));
 const SignIn = lazy(() => import('../pages/SignIn'));
 const SignOut = lazy(() => import('../pages/SignOut'));
 
@@ -14,10 +16,19 @@ export function AppRoutes(): JSX.Element {
       <Route path="/signout" element={<SignOut />} />
 
       <Route
-        path="/private"
+        path="/campuses"
         element={
           <RequireAuth>
-            <h1>Private</h1>
+            <Campuses />
+          </RequireAuth>
+        }
+      />
+
+      <Route
+        path="/programs"
+        element={
+          <RequireAuth>
+            <Programs />
           </RequireAuth>
         }
       />

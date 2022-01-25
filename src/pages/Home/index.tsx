@@ -19,9 +19,15 @@ export function Home(): JSX.Element {
       <button type="button" onClick={handleClick}>
         Get
       </button>
-      <Link to="/signin">Sign in</Link>
-      <Link to="/signout">Sign out</Link>
-      <Link to="/private">Private</Link>
+      <br />
+      <Link to="/signin">Logar</Link>
+      <br />
+      <Link to="/signout">Sair</Link>
+      <br />
+      <br />
+      <Link to="/programs">Cursos</Link>
+      <br />
+      <Link to="/campuses">Câmpus</Link>
     </span>
   );
 }
