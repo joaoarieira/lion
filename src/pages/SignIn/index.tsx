@@ -1,3 +1,4 @@
+import { Button, Container, Grid, TextField } from '@mui/material';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/AuthContext';
@@ -18,24 +19,39 @@ export function SignIn(): JSX.Element {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', width: '200px' }}>
+    <Container>
       <Link to="/">Home</Link>
-      <input
-        type="text"
-        placeholder="Usuário"
-        onChange={({ target: { value } }) => setUsername(value)}
-        value={username}
-      />
-      <input
-        type="password"
-        placeholder="Senha"
-        onChange={({ target: { value } }) => setPassword(value)}
-        value={password}
-      />
-      <button type="button" onClick={handleSignInButton}>
-        Entrar
-      </button>
-    </div>
+      <Grid
+        container
+        direction="column"
+        alignItems="center"
+        justifyContent="center"
+        spacing="1rem"
+        style={{ minHeight: '100vh' }}
+      >
+        <Grid item>
+          <TextField
+            label="Usuário"
+            onChange={({ target: { value } }) => setUsername(value)}
+            value={username}
+            fullWidth
+          />
+        </Grid>
+        <Grid item>
+          <TextField
+            type="password"
+            label="Senha"
+            onChange={({ target: { value } }) => setPassword(value)}
+            value={password}
+          />
+        </Grid>
+        <Grid item>
+          <Button variant="contained" onClick={handleSignInButton} fullWidth>
+            Entrar
+          </Button>
+        </Grid>
+      </Grid>
+    </Container>
   );
 }
 

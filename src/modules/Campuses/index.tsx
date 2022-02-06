@@ -27,7 +27,7 @@ export function Campuses(): JSX.Element {
 
   return (
     <Container>
-      <Typography variant="h5" component="h1" color="primary" gutterBottom>
+      <Typography variant="h5" component="h1" gutterBottom>
         Campuses
       </Typography>
       <div>
