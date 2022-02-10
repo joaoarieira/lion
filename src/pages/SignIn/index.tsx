@@ -1,26 +1,69 @@
 import { Button, Container, Grid, TextField } from '@mui/material';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/AuthContext';
+import * as Yup from 'yup';
+import { useFormik } from 'formik';
 
 export function SignIn(): JSX.Element {
   document.title = 'Entrar | Lion';
 
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [incorrectPassword, setIncorrectPassword] = useState(false);
 
-  const { handleLogin } = useAuth();
+  const { handleLogin, authenticated } = useAuth();
 
   const navigate = useNavigate();
 
-  async function handleSignInButton(): Promise<void> {
-    handleLogin(username, password);
-    navigate('/');
-  }
+  const validationSchema = Yup.object().shape({
+    username: Yup.string()
+      .email('Campo deve ser um email')
+      .required('Campo obrigatório'),
+    password: Yup.string().required('Campo obrigatório'),
+  });
+
+  const signInForm = useFormik({
+    enableReinitialize: true,
+    validateOnBlur: false,
+    validateOnChange: false,
+    initialValues: {
+      username: '',
+      password: '',
+    },
+    validationSchema,
+    onSubmit: async ({ username, password }) => {
+      const loggedIn = await handleLogin(username, password);
+      if (!loggedIn) setIncorrectPassword(true);
+      else navigate('/');
+    },
+  });
+
+  const handleChangeUsername = useCallback(
+    ({
+      target: { value },
+    }: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      signInForm.setFieldValue('username', value);
+      if (incorrectPassword) setIncorrectPassword(false);
+    },
+    [incorrectPassword, signInForm]
+  );
+
+  useEffect(() => {
+    if (authenticated) navigate('/');
+  }, [authenticated, navigate]);
+
+  const handleChangePassword = useCallback(
+    ({
+      target: { value },
+    }: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      signInForm.setFieldValue('password', value);
+      if (incorrectPassword) setIncorrectPassword(false);
+    },
+    [incorrectPassword, signInForm]
+  );
 
   return (
     <Container>
-      <form onSubmit={handleSignInButton}>
+      <form onSubmit={signInForm.handleSubmit}>
         <Grid
           container
           direction="column"
@@ -29,23 +72,34 @@ export function SignIn(): JSX.Element {
           spacing="1rem"
           style={{ minHeight: 'calc(100vh - 110px)' }}
         >
+          {incorrectPassword && (
+            <Grid item>
+              <span>Verifique as informações inseridas!</span>
+            </Grid>
+          )}
+
           <Grid item>
+            {/* TODO: componentizar */}
             <TextField
               label="Usuário"
-              onChange={({ target: { value } }) => setUsername(value)}
-              value={username}
+              onChange={handleChangeUsername}
+              value={signInForm.values.username}
               style={{ minWidth: '280px' }}
+              error={'username' in signInForm.errors}
+              helperText={signInForm.errors['username']}
             />
           </Grid>
+
           <Grid item>
             <TextField
               type="password"
               label="Senha"
-              onChange={({ target: { value } }) => setPassword(value)}
-              value={password}
+              onChange={handleChangePassword}
+              value={signInForm.values.password}
               style={{ minWidth: '280px' }}
             />
           </Grid>
+
           <Grid item>
             <Button type="submit" variant="contained">
               Entrar

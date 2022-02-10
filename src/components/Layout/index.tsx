@@ -29,6 +29,7 @@ import {
   MenuOutlined,
 } from '@mui/icons-material';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../hooks/AuthContext';
 import { grey } from '@mui/material/colors';
 import lionImg from '../../assets/lion.png';
 
@@ -37,10 +38,12 @@ interface ILayoutProps {
 }
 
 export const Layout = ({ children }: ILayoutProps): JSX.Element => {
-  const [isDrawerOpen, setIsDrawerOpen] = useState(true);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
+
+  const { authenticated } = useAuth();
 
   const handleNavigate = useCallback(
     (to: string) => {
@@ -133,9 +136,11 @@ export const Layout = ({ children }: ILayoutProps): JSX.Element => {
             fontStyle="italic"
             fontSize="1.125rem"
             style={{ cursor: 'pointer' }}
-            onClick={() => handleNavigate('/signin')}
+            onClick={() =>
+              handleNavigate(!authenticated ? '/signin' : '/signout')
+            }
           >
-            Entrar
+            {!authenticated ? 'Entrar' : 'Sair'}
           </Typography>
         </WelcomeContainer>
 

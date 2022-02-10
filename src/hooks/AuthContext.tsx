@@ -9,6 +9,7 @@ import {
   useState,
 } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import useFetch from 'use-http';
 
 interface IAuthProviderProps {
@@ -18,7 +19,7 @@ interface IAuthProviderProps {
 interface IAuthContextData {
   authenticated: boolean;
   token?: string;
-  handleLogin: (username: string, password: string) => Promise<void>;
+  handleLogin: (username: string, password: string) => Promise<boolean>;
   handleLogout: () => void;
 }
 
@@ -38,7 +39,7 @@ export const AuthProvider = ({
   });
 
   const handleLogin = useCallback(
-    async (username: string, password: string): Promise<void> => {
+    async (username: string, password: string): Promise<boolean> => {
       setLoading(true);
       await post('/auth/login', { username, password });
 
@@ -52,8 +53,13 @@ export const AuthProvider = ({
       } else {
         setAuthenticated(false);
         localStorage.setItem('@Lion:token', '');
+        console.error(response);
+        if (response.status === undefined || response.status >= 500) {
+          toast.error('Ocorreu um erro interno ao logar. Tente mais tarde.');
+        }
       }
       setLoading(false);
+      return response.ok ?? false;
     },
     [post, response]
   );
@@ -88,7 +94,7 @@ export const AuthProvider = ({
   );
 
   if (loading) {
-    return <div>Carregando...</div>;
+    // return <div>Carregando...</div>;
   }
 
   return (
