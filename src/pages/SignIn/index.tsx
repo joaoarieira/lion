@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/AuthContext';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
+import { InputForm } from '../../components/InputForm';
 
 export function SignIn(): JSX.Element {
   document.title = 'Entrar | Lion';
@@ -74,28 +75,29 @@ export function SignIn(): JSX.Element {
         >
           {incorrectPassword && (
             <Grid item>
-              <span>Verifique as informações inseridas!</span>
+              <span style={{ color: 'red' }}>
+                Verifique as informações inseridas!
+              </span>
             </Grid>
           )}
 
           <Grid item>
-            {/* TODO: componentizar */}
-            <TextField
+            <InputForm
               label="Usuário"
+              name="username"
               onChange={handleChangeUsername}
-              value={signInForm.values.username}
+              formAttributes={signInForm}
               style={{ minWidth: '280px' }}
-              error={'username' in signInForm.errors}
-              helperText={signInForm.errors['username']}
             />
           </Grid>
 
           <Grid item>
-            <TextField
-              type="password"
+            <InputForm
               label="Senha"
+              name="password"
+              type="password"
               onChange={handleChangePassword}
-              value={signInForm.values.password}
+              formAttributes={signInForm}
               style={{ minWidth: '280px' }}
             />
           </Grid>

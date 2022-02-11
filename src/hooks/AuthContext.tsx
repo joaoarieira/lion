@@ -67,7 +67,7 @@ export const AuthProvider = ({
   const handleLogout = useCallback(() => {
     setAuthenticated(false);
     localStorage.removeItem('@Lion:token');
-    navigate('/signin');
+    navigate('/');
   }, [navigate]);
 
   const getTokenFromLocalStorage = useCallback(() => {

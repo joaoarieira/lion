@@ -26,6 +26,12 @@ export const StyledAppBar = styled(AppBar, { name: 'StyledAppBar' })`
   position: static;
 `;
 
+export const ToolbarWrapper = styled('div', { name: 'ToolbarWrapper' })`
+  max-width: 1360px;
+  width: 100%;
+  margin: auto;
+`;
+
 export const StyledToolbar = styled(Toolbar, { name: 'StyledToolBar' })`
   background-color: transparent;
   color: black;

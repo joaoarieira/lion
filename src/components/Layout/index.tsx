@@ -20,6 +20,7 @@ import {
   LogoIconButton,
   CampusSelectContainer,
   WelcomeContainer,
+  ToolbarWrapper,
 } from './styles';
 import {
   HomeOutlined,
@@ -77,24 +78,26 @@ export const Layout = ({ children }: ILayoutProps): JSX.Element => {
   return (
     <div>
       <StyledAppBar>
-        <StyledToolbar>
-          <Filler />
-          <LogoIconButton
-            size="large"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-            onClick={() => handleNavigate('/')}
-          >
-            <Logo src={lionImg} />
-          </LogoIconButton>
+        <ToolbarWrapper>
+          <StyledToolbar>
+            <Filler />
+            <LogoIconButton
+              size="large"
+              aria-label="menu"
+              sx={{ mr: 2 }}
+              onClick={() => handleNavigate('/')}
+            >
+              <Logo src={lionImg} />
+            </LogoIconButton>
 
-          <Button
-            color="inherit"
-            onClick={() => setIsDrawerOpen(!isDrawerOpen)}
-          >
-            <MenuOutlined />
-          </Button>
-        </StyledToolbar>
+            <Button
+              color="inherit"
+              onClick={() => setIsDrawerOpen(!isDrawerOpen)}
+            >
+              <MenuOutlined />
+            </Button>
+          </StyledToolbar>
+        </ToolbarWrapper>
       </StyledAppBar>
 
       <StyledDrawer
@@ -123,7 +126,7 @@ export const Layout = ({ children }: ILayoutProps): JSX.Element => {
             variant="h5"
             component="p"
             width="0px"
-            marginTop="1.5rem"
+            marginTop="2.5rem"
             marginLeft="1rem"
           >
             Bem vindo(a).
@@ -131,7 +134,7 @@ export const Layout = ({ children }: ILayoutProps): JSX.Element => {
 
           <Typography
             variant="body1"
-            marginTop="1.5rem"
+            marginTop="3rem"
             marginBottom="5rem"
             fontStyle="italic"
             fontSize="1.125rem"
