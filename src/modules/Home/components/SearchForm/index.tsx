@@ -1,20 +1,16 @@
-import { Box, Button, Container, Grid } from '@mui/material';
+import { Box, Button, Grid } from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import useFetch from 'use-http';
-import { InputForm } from '../../components/InputForm';
 import { SearchOutlined } from '@mui/icons-material';
 
-export function Home(): JSX.Element {
-  const { get, response } = useFetch('/users');
+import { InputForm } from '../../../../components/InputForm';
+import { useNavigate } from 'react-router-dom';
 
-  async function handleClick(): Promise<void> {
-    await get();
-    console.log(response.data);
-  }
+export function SearchForm(): JSX.Element {
+  const navigate = useNavigate();
 
   const validationSchema = Yup.object().shape({
-    filter: Yup.string(),
+    search: Yup.string(),
   });
 
   const searchForm = useFormik({
@@ -22,11 +18,11 @@ export function Home(): JSX.Element {
     validateOnBlur: false,
     validateOnChange: false,
     initialValues: {
-      filter: '',
+      query: '',
     },
     validationSchema,
-    onSubmit: async ({ filter }) => {
-      console.log(filter);
+    onSubmit: async ({ query }) => {
+      navigate(`/search?query=${query}`);
     },
   });
 
@@ -42,13 +38,13 @@ export function Home(): JSX.Element {
           justifyContent="center"
           alignContent="center"
           spacing={5}
-          style={{ minHeight: 'calc(100vh - 110px)', maxWidth: '400px' }}
+          style={{ minHeight: 'calc(100vh - 130px)', maxWidth: '400px' }}
         >
           <Grid item xs={12}>
             <InputForm
               label="Pesquisar monitorias"
               placeholder="Cálculo, Sociologia, CRP192, etc."
-              name="filter"
+              name="query"
               formAttributes={searchForm}
               autoComplete="off"
               fullWidth
@@ -63,9 +59,6 @@ export function Home(): JSX.Element {
             >
               Pesquisar
             </Button>
-            {/* <button type="button" onClick={handleClick}>
-              Get
-            </button> */}
           </Grid>
         </Grid>
       </form>
@@ -73,4 +66,4 @@ export function Home(): JSX.Element {
   );
 }
 
-export default Home;
+export default SearchForm;

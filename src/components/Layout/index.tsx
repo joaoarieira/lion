@@ -23,6 +23,7 @@ import {
   ToolbarWrapper,
 } from './styles';
 import {
+  ChevronLeftOutlined,
   HomeOutlined,
   InfoOutlined,
   LocationOnOutlined,
@@ -80,7 +81,14 @@ export const Layout = ({ children }: ILayoutProps): JSX.Element => {
       <StyledAppBar>
         <ToolbarWrapper>
           <StyledToolbar>
-            <Filler />
+            {location.pathname === '/' ? (
+              <Filler />
+            ) : (
+              <Button color="inherit" onClick={() => navigate(-1)}>
+                <ChevronLeftOutlined />
+              </Button>
+            )}
+
             <LogoIconButton
               size="large"
               aria-label="menu"
@@ -171,7 +179,9 @@ export const Layout = ({ children }: ILayoutProps): JSX.Element => {
       </StyledDrawer>
 
       <Page>
-        <Container>{children}</Container>
+        <Container sx={{ paddingTop: '2rem', paddingBottom: '2rem' }}>
+          {children}
+        </Container>
       </Page>
     </div>
   );

@@ -45,6 +45,7 @@ export const Filler = styled('span')`
 export const LogoIconButton = styled(IconButton, { name: 'LogoIconButton' })`
   padding: 22px 0 0 0;
   color: inherit;
+  margin-right: 0 !important;
 
   &:hover {
     background: none;

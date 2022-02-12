@@ -52,3 +52,5 @@ export function Campuses(): JSX.Element {
     </Container>
   );
 }
+
+export default Campuses;

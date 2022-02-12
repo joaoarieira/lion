@@ -7,3 +7,5 @@ export function Programs(): JSX.Element {
     </Container>
   );
 }
+
+export default Programs;
