@@ -11,6 +11,17 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import useFetch from 'use-http';
+import jwt_decode from 'jwt-decode';
+
+interface IJwtDecodedInfos {
+  username: string;
+  userrole: string;
+}
+
+interface IUser {
+  name: string;
+  role: string;
+}
 
 interface IAuthProviderProps {
   children: ReactNode;
@@ -19,6 +30,7 @@ interface IAuthProviderProps {
 interface IAuthContextData {
   authenticated: boolean;
   token?: string;
+  userAuthenticated: IUser;
   handleLogin: (username: string, password: string) => Promise<boolean>;
   handleLogout: () => void;
 }
@@ -31,6 +43,10 @@ export const AuthProvider = ({
   const [authenticated, setAuthenticated] = useState(false);
   const [token, setToken] = useState('');
   const [loading, setLoading] = useState(false);
+  const [userAuthenticated, setUserAuthenticated] = useState<IUser>({
+    name: '',
+    role: '',
+  });
 
   const navigate = useNavigate();
 
@@ -45,7 +61,17 @@ export const AuthProvider = ({
 
       if (response.ok) {
         setAuthenticated(true);
-        setToken(response.data.access_token.toString());
+        setToken(response.data.access_token);
+
+        const jwtDecoded = jwt_decode(
+          response.data.access_token
+        ) as IJwtDecodedInfos;
+
+        setUserAuthenticated({
+          name: jwtDecoded.username,
+          role: jwtDecoded.userrole,
+        });
+
         localStorage.setItem(
           '@Lion:token',
           JSON.stringify(response.data.access_token)
@@ -74,8 +100,14 @@ export const AuthProvider = ({
     const tokenLocalStorage = localStorage.getItem('@Lion:token');
     if (tokenLocalStorage) {
       const newToken = JSON.parse(tokenLocalStorage);
+      const jwtDecoded = jwt_decode(newToken) as IJwtDecodedInfos;
+
       setAuthenticated(true);
       setToken(newToken);
+      setUserAuthenticated({
+        name: jwtDecoded.username,
+        role: jwtDecoded.userrole,
+      });
     }
   }, []);
 
@@ -86,15 +118,16 @@ export const AuthProvider = ({
   const memoizedContextValue = useMemo<IAuthContextData>(
     () => ({
       authenticated,
+      token,
+      userAuthenticated,
       handleLogin,
       handleLogout,
-      token,
     }),
-    [authenticated, handleLogin, handleLogout, token]
+    [authenticated, token, userAuthenticated, handleLogin, handleLogout]
   );
 
   if (loading) {
-    // return <div>Carregando...</div>;
+    return <div>Carregando...</div>;
   }
 
   return (

@@ -28,3 +28,8 @@ export function dayNumberToString(number: number): string {
   }
   return '';
 }
+
+export const roleNames = {
+  admin: 'admin',
+  student_tutor: 'student_tutor',
+};

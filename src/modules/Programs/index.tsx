@@ -1,11 +1,5 @@
-import { Container, Typography } from '@mui/material';
-
 export function Programs(): JSX.Element {
-  return (
-    <Container>
-      <Typography>Programs</Typography>
-    </Container>
-  );
+  return <h1>Programs</h1>;
 }
 
 export default Programs;

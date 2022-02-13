@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react';
+import { Suspense } from 'react';
 import { ToastContainer } from 'react-toastify';
 import { ThemeProvider } from '@mui/material';
 import { theme } from './styles/theme';
@@ -6,8 +6,7 @@ import 'react-toastify/dist/ReactToastify.min.css';
 import HttpInterceptorProvider from './hooks/HttpInterceptorProvider';
 import Routes from './routes';
 import { Layout } from './components/Layout';
-
-const AuthProvider = lazy(() => import('./hooks/AuthContext'));
+import AuthProvider from './hooks/AuthContext';
 
 function App(): JSX.Element {
   return (

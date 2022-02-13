@@ -15,3 +15,5 @@ export function RequireAuth({ children }: IRequireAuthProps): JSX.Element {
 
   return children;
 }
+
+export default RequireAuth;

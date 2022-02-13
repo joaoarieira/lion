@@ -150,10 +150,7 @@ export function StudentTutoringTutorDetails(): JSX.Element {
         {studentTutoringTutor?.class_schedules &&
           studentTutoringTutor.class_schedules.length > 0 && (
             <InfoContainer item xs={12}>
-              <Paper
-                variant="outlined"
-                sx={{ backgroundColor: 'transparent', margin: '0 1rem' }}
-              >
+              <Paper variant="outlined" sx={{ margin: '0 1rem' }}>
                 <SchedulesBox>
                   {studentTutoringTutor.class_schedules.map(
                     (class_schedule) => (

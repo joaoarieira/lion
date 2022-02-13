@@ -1,13 +1,11 @@
 import {
   List,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
   Typography,
   Select,
   MenuItem,
   Container,
   Button,
+  Divider,
 } from '@mui/material';
 import { ReactNode, useCallback, useMemo, useState } from 'react';
 import {
@@ -23,17 +21,23 @@ import {
   ToolbarWrapper,
 } from './styles';
 import {
+  AccountBalance,
   ChevronLeftOutlined,
+  HistoryEduOutlined,
   HomeOutlined,
   InfoOutlined,
   LocationOnOutlined,
   MenuBookOutlined,
   MenuOutlined,
+  PersonOutline,
+  SchoolOutlined,
 } from '@mui/icons-material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/AuthContext';
 import { grey } from '@mui/material/colors';
 import lionImg from '../../assets/lion.png';
+import { roleNames } from '../../helpers';
+import MenuListItem, { IItem } from '../MenuListItem';
 
 interface ILayoutProps {
   children: ReactNode;
@@ -45,7 +49,7 @@ export const Layout = ({ children }: ILayoutProps): JSX.Element => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { authenticated } = useAuth();
+  const { authenticated, userAuthenticated } = useAuth();
 
   const handleNavigate = useCallback(
     (to: string) => {
@@ -55,7 +59,7 @@ export const Layout = ({ children }: ILayoutProps): JSX.Element => {
     [navigate]
   );
 
-  const menuItems = useMemo(
+  const menuItems: IItem[] = useMemo(
     () => [
       {
         text: 'Página inicial',
@@ -71,6 +75,43 @@ export const Layout = ({ children }: ILayoutProps): JSX.Element => {
         text: 'Sobre',
         icon: <InfoOutlined />,
         path: '/about',
+      },
+    ],
+    []
+  );
+
+  const adminMenuItems: IItem[] = useMemo(
+    () => [
+      {
+        text: 'Campi',
+        icon: <AccountBalance />,
+        path: '/campuses',
+      },
+      {
+        text: 'Cursos',
+        icon: <SchoolOutlined />,
+        path: '/programs',
+      },
+      {
+        text: 'Usuários',
+        icon: <PersonOutline />,
+        path: '/users',
+      },
+      {
+        text: 'Monitorias',
+        icon: <HistoryEduOutlined />,
+        path: '/student-tutorings',
+      },
+    ],
+    []
+  );
+
+  const studentTutorMenuItems: IItem[] = useMemo(
+    () => [
+      {
+        text: 'Monitorias',
+        icon: <HistoryEduOutlined />,
+        path: '/student-tutoring-tutors',
       },
     ],
     []
@@ -157,24 +198,38 @@ export const Layout = ({ children }: ILayoutProps): JSX.Element => {
 
         <List>
           {menuItems.map((item) => (
-            <ListItemButton
+            <MenuListItem
               key={item.text}
-              onClick={() => handleNavigate(item.path)}
-              style={{
-                borderRight: '4px solid',
-                borderColor:
-                  location.pathname === item.path ? grey[700] : 'transparent',
-              }}
-            >
-              <ListItemIcon style={{ minWidth: '2.25rem' }}>
-                {item.icon}
-              </ListItemIcon>
-              <ListItemText
-                primaryTypographyProps={{ fontSize: '18px' }}
-                primary={item.text}
-              />
-            </ListItemButton>
+              item={item}
+              handleNavigate={handleNavigate}
+            />
           ))}
+
+          {authenticated && userAuthenticated.role === roleNames.admin && (
+            <>
+              <Divider />
+              {adminMenuItems.map((item) => (
+                <MenuListItem
+                  key={item.text}
+                  item={item}
+                  handleNavigate={handleNavigate}
+                />
+              ))}
+            </>
+          )}
+
+          {authenticated && userAuthenticated.role === roleNames.student_tutor && (
+            <>
+              <Divider />
+              {studentTutorMenuItems.map((item) => (
+                <MenuListItem
+                  key={item.text}
+                  item={item}
+                  handleNavigate={handleNavigate}
+                />
+              ))}
+            </>
+          )}
         </List>
       </StyledDrawer>
 
