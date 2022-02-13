@@ -20,7 +20,6 @@ import { ICampus } from '../../../../@types/entities';
 import CrudHeader from '../../../../components/CrudHeader';
 import { roleNames } from '../../../../helpers';
 import { useAuth } from '../../../../hooks/AuthContext';
-import { StyledTableContainer } from './styles';
 
 export function Campuses(): JSX.Element {
   const [campuses, setCampuses] = useState<ICampus[]>([]);
@@ -52,7 +51,7 @@ export function Campuses(): JSX.Element {
     <Box>
       <CrudHeader title="Campi" />
 
-      <TableContainer component={StyledTableContainer}>
+      <TableContainer component={Paper}>
         <Table size="medium">
           <TableHead>
             <TableRow>
