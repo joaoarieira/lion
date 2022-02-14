@@ -7,7 +7,7 @@ import {
   Button,
   Divider,
 } from '@mui/material';
-import { ReactNode, useCallback, useMemo, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Page,
   StyledDrawer,
@@ -38,6 +38,9 @@ import { grey } from '@mui/material/colors';
 import lionImg from '../../assets/lion.png';
 import { roleNames } from '../../helpers';
 import MenuListItem, { IItem } from '../MenuListItem';
+import useFetch from 'use-http';
+import { ICampus } from '../../@types/entities';
+import { toast } from 'react-toastify';
 
 interface ILayoutProps {
   children: ReactNode;
@@ -45,11 +48,23 @@ interface ILayoutProps {
 
 export const Layout = ({ children }: ILayoutProps): JSX.Element => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [campuses, setCampuses] = useState<ICampus[]>([]);
 
   const navigate = useNavigate();
   const location = useLocation();
 
   const { authenticated, userAuthenticated } = useAuth();
+  const { get, response } = useFetch('/campuses');
+
+  const fetchCampusesData = useCallback(async () => {
+    await get();
+
+    if (response.ok) {
+      setCampuses(response.data);
+    } else {
+      toast.error('Falha ao obter os dados dos campi.');
+    }
+  }, [get, response]);
 
   const handleNavigate = useCallback(
     (to: string) => {
@@ -117,6 +132,10 @@ export const Layout = ({ children }: ILayoutProps): JSX.Element => {
     []
   );
 
+  useEffect(() => {
+    fetchCampusesData();
+  }, [fetchCampusesData]);
+
   return (
     <div>
       <StyledAppBar>
@@ -163,10 +182,13 @@ export const Layout = ({ children }: ILayoutProps): JSX.Element => {
               color: grey[700],
             }}
           />
-          <Select style={{ width: '100%', height: '40px' }} defaultValue={1}>
-            <MenuItem value={1}>Rio Paranaíba</MenuItem>
-            <MenuItem value={2}>Viçosa</MenuItem>
-            <MenuItem value={3}>Florestal</MenuItem>
+          <Select style={{ width: '100%', height: '40px' }} defaultValue="">
+            {/* TODO: colocar o campus escolhido no localStorage */}
+            {campuses.map((campus) => (
+              <MenuItem key={campus.id} value={campus.id}>
+                {campus.name}
+              </MenuItem>
+            ))}
           </Select>
         </CampusSelectContainer>
 

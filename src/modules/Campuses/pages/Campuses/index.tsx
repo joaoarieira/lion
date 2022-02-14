@@ -1,9 +1,4 @@
 import {
-  DeleteOutlined,
-  EditOutlined,
-  PowerSettingsNewOutlined,
-} from '@mui/icons-material';
-import {
   Box,
   Paper,
   Table,
@@ -14,18 +9,27 @@ import {
   TableRow,
 } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import useFetch from 'use-http';
+
 import { ICampus } from '../../../../@types/entities';
-import CrudHeader from '../../../../components/CrudHeader';
+import { CrudHeader } from '../../../../components/CrudHeader';
+import { DeleteDialog } from '../../../../components/DeleteDialog';
 import { roleNames } from '../../../../helpers';
 import { useAuth } from '../../../../hooks/AuthContext';
+import { ActionsCell } from '../../Components/ActionsCell';
 
 export function Campuses(): JSX.Element {
-  const [campuses, setCampuses] = useState<ICampus[]>([]);
+  document.title = 'Campi | Lion';
 
-  const { get, response } = useFetch('/campuses');
+  const [campuses, setCampuses] = useState<ICampus[]>([]);
+  const [campusId, setCampusId] = useState<string | undefined>();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const { get, del, response } = useFetch('/campuses');
   const { authenticated, userAuthenticated } = useAuth();
+  const navigate = useNavigate();
 
   const fetchCampusesData = useCallback(async () => {
     if (authenticated) {
@@ -43,9 +47,46 @@ export function Campuses(): JSX.Element {
     }
   }, [authenticated, get, response, userAuthenticated.role]);
 
+  const canDelete = useCallback((campus: ICampus) => {
+    // exclui um campus apenas se não há nenhum curso relacionado a ele
+    if (campus.programs) {
+      if (campus.programs.length === 0) {
+        return true;
+      }
+    }
+    return false;
+  }, []);
+
+  const handleOpenModal = useCallback((id: string) => {
+    setIsModalOpen(true);
+    setCampusId(id);
+  }, []);
+
+  const handleDeleteCampus = useCallback(async () => {
+    await del(campusId);
+
+    if (response.ok) {
+      toast.success('Campus excluído com sucesso.');
+      fetchCampusesData();
+    } else {
+      toast.error('Falha ao excluir registro. Tente novamente mais tarde.');
+    }
+
+    setIsModalOpen(false);
+  }, [campusId, del, fetchCampusesData, response.ok]);
+
+  const handleEditCampus = useCallback(
+    (id: string | undefined) => {
+      if (id) navigate(id);
+    },
+    [navigate]
+  );
+
   useEffect(() => {
     fetchCampusesData();
   }, [fetchCampusesData]);
+
+  // TODO: criar um componente para as tabelas
 
   return (
     <Box>
@@ -55,7 +96,7 @@ export function Campuses(): JSX.Element {
         <Table size="medium">
           <TableHead>
             <TableRow>
-              <TableCell>Campus</TableCell>
+              <TableCell>Nome</TableCell>
               <TableCell align="right">Ações</TableCell>
             </TableRow>
           </TableHead>
@@ -64,16 +105,23 @@ export function Campuses(): JSX.Element {
             {campuses.map((campus) => (
               <TableRow key={campus.id}>
                 <TableCell component="th">{campus.name}</TableCell>
-                <TableCell align="right">
-                  <PowerSettingsNewOutlined fontSize="small" />
-                  <EditOutlined fontSize="small" />
-                  <DeleteOutlined fontSize="small" />
-                </TableCell>
+                <ActionsCell
+                  hideToggle
+                  onClickEdit={() => handleEditCampus(campus.id)}
+                  disableDelete={!canDelete(campus)}
+                  onClickDelete={() => handleOpenModal(campus.id)}
+                />
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
+
+      <DeleteDialog
+        open={isModalOpen}
+        handleClose={() => setIsModalOpen(false)}
+        handleConfirm={handleDeleteCampus}
+      />
     </Box>
   );
 }
