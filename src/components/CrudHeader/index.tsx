@@ -1,19 +1,42 @@
-import { Box, Typography } from '@mui/material';
-import { TitleWrapper } from './styles';
+import { AddOutlined } from '@mui/icons-material';
+import { Button, Typography } from '@mui/material';
+import { TitleWrapper, StyledBox } from './styles';
 
 interface ICrudHeaderProps {
   title: string;
+  showButton?: boolean;
+  onClickButton?: React.MouseEventHandler<HTMLButtonElement> | undefined;
+  customButton?: React.ReactNode;
 }
 
-export function CrudHeader({ title }: ICrudHeaderProps): JSX.Element {
+export function CrudHeader({
+  title,
+  showButton,
+  onClickButton,
+  customButton,
+}: ICrudHeaderProps): JSX.Element {
   return (
-    <Box marginBottom="1.5rem">
+    <StyledBox>
       <TitleWrapper>
         <Typography component="h1" variant="h5" fontWeight={300}>
           {title}
         </Typography>
       </TitleWrapper>
-    </Box>
+
+      {showButton ? (
+        !customButton ? (
+          <Button
+            variant="outlined"
+            onClick={onClickButton}
+            startIcon={<AddOutlined />}
+          >
+            Novo
+          </Button>
+        ) : (
+          customButton
+        )
+      ) : null}
+    </StyledBox>
   );
 }
 

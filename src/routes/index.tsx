@@ -14,7 +14,10 @@ const SignOut = lazy(() => import('../pages/SignOut'));
 const About = lazy(() => import('../pages/About'));
 const Notices = lazy(() => import('../pages/Notices'));
 const Campuses = lazy(() => import('../modules/Campuses/pages/Campuses'));
-const Campus = lazy(() => import('../modules/Campuses/pages/Campus'));
+const CampusEdit = lazy(() => import('../modules/Campuses/pages/CampusEdit'));
+const CampusCreate = lazy(
+  () => import('../modules/Campuses/pages/CampusCreate')
+);
 const Programs = lazy(() => import('../modules/Programs/pages/Programs'));
 const Program = lazy(() => import('../modules/Programs/pages/Program'));
 const StudentTutoringTutorDetails = lazy(
@@ -44,7 +47,15 @@ export function AppRoutes(): JSX.Element {
         path="campuses/:id"
         element={
           <RequireAuth>
-            <Campus />
+            <CampusEdit />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="campuses/new"
+        element={
+          <RequireAuth>
+            <CampusCreate />
           </RequireAuth>
         }
       />

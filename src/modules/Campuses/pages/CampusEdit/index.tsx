@@ -19,7 +19,7 @@ interface ICampusEditValues {
   name: string;
 }
 
-export function Campus(): JSX.Element {
+export function CampusEdit(): JSX.Element {
   document.title = 'Campus | Lion';
 
   const [campus, setCampus] = useState<ICampus | undefined>();
@@ -119,4 +119,4 @@ export function Campus(): JSX.Element {
   );
 }
 
-export default Campus;
+export default CampusEdit;

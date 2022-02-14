@@ -75,6 +75,8 @@ export function Campuses(): JSX.Element {
     setIsModalOpen(false);
   }, [campusId, del, fetchCampusesData, response.ok]);
 
+  const handleCreateCampus = useCallback(() => navigate('new'), [navigate]);
+
   const handleEditCampus = useCallback(
     (id: string | undefined) => {
       if (id) navigate(id);
@@ -90,7 +92,7 @@ export function Campuses(): JSX.Element {
 
   return (
     <Box>
-      <CrudHeader title="Campi" />
+      <CrudHeader title="Campi" showButton onClickButton={handleCreateCampus} />
 
       <TableContainer component={Paper}>
         <Table size="medium">
