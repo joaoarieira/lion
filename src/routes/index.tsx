@@ -15,7 +15,8 @@ const About = lazy(() => import('../pages/About'));
 const Notices = lazy(() => import('../pages/Notices'));
 const Campuses = lazy(() => import('../modules/Campuses/pages/Campuses'));
 const Campus = lazy(() => import('../modules/Campuses/pages/Campus'));
-const Programs = lazy(() => import('../modules/Programs'));
+const Programs = lazy(() => import('../modules/Programs/pages/Programs'));
+const Program = lazy(() => import('../modules/Programs/pages/Program'));
 const StudentTutoringTutorDetails = lazy(
   () => import('../pages/StudentTutoringTutorDetails')
 );
@@ -53,6 +54,15 @@ export function AppRoutes(): JSX.Element {
         element={
           <RequireAuth>
             <Programs />
+          </RequireAuth>
+        }
+      />
+
+      <Route
+        path="programs/:id"
+        element={
+          <RequireAuth>
+            <Program />
           </RequireAuth>
         }
       />

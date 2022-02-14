@@ -13,44 +13,44 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import useFetch from 'use-http';
 
-import { ICampus } from '../../../../@types/entities';
+import { IProgram } from '../../../../@types/entities';
 import { CrudHeader } from '../../../../components/CrudHeader';
 import { DeleteDialog } from '../../../../components/DeleteDialog';
 import { roleNames } from '../../../../helpers';
 import { useAuth } from '../../../../hooks/AuthContext';
 import { ActionsCell } from '../../../../components/ActionsCell';
 
-export function Campuses(): JSX.Element {
-  document.title = 'Campi | Lion';
+export function Programs(): JSX.Element {
+  document.title = 'Cursos | Lion';
 
-  const [campuses, setCampuses] = useState<ICampus[]>([]);
-  const [campusId, setCampusId] = useState<string | undefined>();
+  const [programs, setPrograms] = useState<IProgram[]>([]);
+  const [programId, setProgramId] = useState<string | undefined>();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { get, del, response } = useFetch('/campuses');
+  const { get, del, response } = useFetch('/programs');
   const { authenticated, userAuthenticated } = useAuth();
   const navigate = useNavigate();
 
-  const fetchCampusesData = useCallback(async () => {
+  const fetchProgramsData = useCallback(async () => {
     if (authenticated) {
       if (userAuthenticated.role === roleNames.admin) {
         await get();
 
         if (response.ok) {
-          setCampuses(response.data);
+          setPrograms(response.data);
         } else {
           toast.error(
-            'Falha ao obter os dados dos campi. Tente novamente mais tarde.'
+            'Falha ao obter os dados dos cursos. Tente novamente mais tarde.'
           );
         }
       }
     }
   }, [authenticated, get, response, userAuthenticated.role]);
 
-  const canDelete = useCallback((campus: ICampus) => {
-    // exclui um campus apenas se não há nenhum curso relacionado a ele
-    if (campus.programs) {
-      if (campus.programs.length === 0) {
+  const canDelete = useCallback((program: IProgram) => {
+    // exclui um curso apenas se não há nenhuma monitoria relacionado a ele
+    if (program.student_tutoring_programs) {
+      if (program.student_tutoring_programs.length === 0) {
         return true;
       }
     }
@@ -59,23 +59,23 @@ export function Campuses(): JSX.Element {
 
   const handleOpenModal = useCallback((id: string) => {
     setIsModalOpen(true);
-    setCampusId(id);
+    setProgramId(id);
   }, []);
 
-  const handleDeleteCampus = useCallback(async () => {
-    await del(campusId);
+  const handleDeleteProgram = useCallback(async () => {
+    await del(programId);
 
     if (response.ok) {
-      toast.success('Campus excluído com sucesso.');
-      fetchCampusesData();
+      toast.success('Programa excluído com sucesso.');
+      fetchProgramsData();
     } else {
       toast.error('Falha ao excluir registro. Tente novamente mais tarde.');
     }
 
     setIsModalOpen(false);
-  }, [campusId, del, fetchCampusesData, response.ok]);
+  }, [programId, del, fetchProgramsData, response.ok]);
 
-  const handleEditCampus = useCallback(
+  const handleEditProgram = useCallback(
     (id: string | undefined) => {
       if (id) navigate(id);
     },
@@ -83,33 +83,33 @@ export function Campuses(): JSX.Element {
   );
 
   useEffect(() => {
-    fetchCampusesData();
-  }, [fetchCampusesData]);
-
-  // TODO: criar um componente para as tabelas
+    fetchProgramsData();
+  }, [fetchProgramsData]);
 
   return (
     <Box>
-      <CrudHeader title="Campi" />
+      <CrudHeader title="Cursos" />
 
       <TableContainer component={Paper}>
         <Table size="medium">
           <TableHead>
             <TableRow>
               <TableCell>Nome</TableCell>
+              <TableCell>Campus</TableCell>
               <TableCell align="right">Ações</TableCell>
             </TableRow>
           </TableHead>
 
           <TableBody>
-            {campuses.map((campus) => (
-              <TableRow key={campus.id}>
-                <TableCell component="th">{campus.name}</TableCell>
+            {programs.map((program) => (
+              <TableRow key={program.id}>
+                <TableCell component="th">{program.name}</TableCell>
+                <TableCell component="th">{program.campus?.name}</TableCell>
                 <ActionsCell
                   hideToggle
-                  onClickEdit={() => handleEditCampus(campus.id)}
-                  disableDelete={!canDelete(campus)}
-                  onClickDelete={() => handleOpenModal(campus.id)}
+                  onClickEdit={() => handleEditProgram(program.id)}
+                  disableDelete={!canDelete(program)}
+                  onClickDelete={() => handleOpenModal(program.id)}
                 />
               </TableRow>
             ))}
@@ -120,10 +120,10 @@ export function Campuses(): JSX.Element {
       <DeleteDialog
         open={isModalOpen}
         handleClose={() => setIsModalOpen(false)}
-        handleConfirm={handleDeleteCampus}
+        handleConfirm={handleDeleteProgram}
       />
     </Box>
   );
 }
 
-export default Campuses;
+export default Programs;

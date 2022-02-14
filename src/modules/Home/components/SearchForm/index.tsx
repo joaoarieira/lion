@@ -3,7 +3,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { SearchOutlined } from '@mui/icons-material';
 
-import { InputForm } from '../../../../components/InputForm';
+import { FormInput } from '../../../../components/FormInput';
 import { useNavigate } from 'react-router-dom';
 
 export function SearchForm(): JSX.Element {
@@ -41,7 +41,7 @@ export function SearchForm(): JSX.Element {
           style={{ minHeight: 'calc(100vh - 130px)', maxWidth: '400px' }}
         >
           <Grid item xs={12}>
-            <InputForm
+            <FormInput
               label="Pesquisar monitorias"
               placeholder="Cálculo, Sociologia, CRP192, etc."
               name="query"

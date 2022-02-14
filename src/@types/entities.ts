@@ -31,6 +31,7 @@ export interface IProgram extends IProgramRelations {
 
 interface IProgramRelations {
   campus?: ICampus;
+  student_tutoring_programs?: IStudentTutoringProgram[];
 }
 
 export interface IStudentTutoring extends IStudentTutoringRelations {

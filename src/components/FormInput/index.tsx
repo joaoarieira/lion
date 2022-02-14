@@ -3,17 +3,17 @@ import { TextField, StandardTextFieldProps } from '@mui/material';
 import { FormikProps } from 'formik';
 import { useCallback } from 'react';
 
-interface IInputForm extends StandardTextFieldProps {
+interface IFormInput extends StandardTextFieldProps {
   formAttributes: FormikProps<any>;
   name: string;
 }
 
-export function InputForm({
+export function FormInput({
   name,
   formAttributes,
   onChange,
   ...textFieldProps
-}: IInputForm): JSX.Element {
+}: IFormInput): JSX.Element {
   const handleChange = useCallback(
     ({ target: { value } }: React.ChangeEvent<HTMLInputElement>) => {
       formAttributes.setFieldValue(name, value);

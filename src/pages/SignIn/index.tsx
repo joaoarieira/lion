@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/AuthContext';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-import { InputForm } from '../../components/InputForm';
+import { FormInput } from '../../components/FormInput';
 
 export function SignIn(): JSX.Element {
   document.title = 'Entrar | Lion';
@@ -82,7 +82,7 @@ export function SignIn(): JSX.Element {
           )}
 
           <Grid item>
-            <InputForm
+            <FormInput
               label="Usuário"
               name="username"
               onChange={handleChangeUsername}
@@ -92,7 +92,7 @@ export function SignIn(): JSX.Element {
           </Grid>
 
           <Grid item>
-            <InputForm
+            <FormInput
               label="Senha"
               name="password"
               type="password"

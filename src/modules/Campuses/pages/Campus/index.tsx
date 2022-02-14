@@ -10,7 +10,7 @@ import { ICampus } from '../../../../@types/entities';
 import { CrudHeader } from '../../../../components/CrudHeader';
 import { isUUID, roleNames } from '../../../../helpers';
 import { useAuth } from '../../../../hooks/AuthContext';
-import { InputForm } from '../../../../components/InputForm';
+import { FormInput } from '../../../../components/FormInput';
 import { FormPaper } from '../../../../components/FormPaper';
 import { FormFooter } from '../../../../components/FormFooter';
 import { SaveButton } from '../../../../components/SaveButton';
@@ -43,7 +43,7 @@ export function Campus(): JSX.Element {
     },
     validationSchema,
     onSubmit: async (values) => {
-      editCampus(values);
+      await editCampus(values);
     },
   });
 
@@ -99,7 +99,7 @@ export function Campus(): JSX.Element {
         <form onSubmit={editForm.handleSubmit}>
           <Grid container>
             <Grid item xs={12} md={6}>
-              <InputForm
+              <FormInput
                 label="Nome"
                 placeholder="Digite o nome"
                 name="name"

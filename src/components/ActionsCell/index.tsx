@@ -4,7 +4,7 @@ import {
   PowerSettingsNewOutlined,
 } from '@mui/icons-material';
 import { IconButtonProps, TableCell, Tooltip } from '@mui/material';
-import TableButton from '../TableButton';
+import { TableButton } from '../TableButton';
 import { ContainerButtons } from './styles';
 
 interface IActionsCellProps {
