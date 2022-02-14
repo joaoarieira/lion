@@ -19,7 +19,10 @@ const CampusCreate = lazy(
   () => import('../modules/Campuses/pages/CampusCreate')
 );
 const Programs = lazy(() => import('../modules/Programs/pages/Programs'));
-const Program = lazy(() => import('../modules/Programs/pages/Program'));
+const ProgramEdit = lazy(() => import('../modules/Programs/pages/ProgramEdit'));
+const ProgramCreate = lazy(
+  () => import('../modules/Programs/pages/ProgramCreate')
+);
 const StudentTutoringTutorDetails = lazy(
   () => import('../pages/StudentTutoringTutorDetails')
 );
@@ -68,12 +71,19 @@ export function AppRoutes(): JSX.Element {
           </RequireAuth>
         }
       />
-
       <Route
         path="programs/:id"
         element={
           <RequireAuth>
-            <Program />
+            <ProgramEdit />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="programs/new"
+        element={
+          <RequireAuth>
+            <ProgramCreate />
           </RequireAuth>
         }
       />

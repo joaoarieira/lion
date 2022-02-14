@@ -1,12 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
+  FormControl,
   FormHelperText,
+  InputLabel,
   Select,
   SelectChangeEvent,
   SelectProps,
 } from '@mui/material';
 import { FormikProps } from 'formik';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 
 interface IFormSelect extends SelectProps {
   formAttributes: FormikProps<any>;
@@ -17,6 +19,7 @@ export function FormSelect({
   name,
   formAttributes,
   onChange,
+  label,
   ...selectProps
 }: IFormSelect): JSX.Element {
   const handleChange = useCallback(
@@ -25,15 +28,24 @@ export function FormSelect({
     },
     [formAttributes, name]
   );
+
+  const isErroed = useMemo(
+    () => name in formAttributes.errors,
+    [formAttributes.errors, name]
+  );
   return (
-    <span>
+    <FormControl fullWidth>
+      <InputLabel error={isErroed}>{label}</InputLabel>
       <Select
         onChange={onChange ? onChange : handleChange}
+        label={label}
         value={formAttributes.values[name]}
-        error={name in formAttributes.errors}
+        error={isErroed}
         {...selectProps}
       />
-      <FormHelperText>{formAttributes.errors[name]}</FormHelperText>
-    </span>
+      <FormHelperText error={isErroed}>
+        {formAttributes.errors[name]}
+      </FormHelperText>
+    </FormControl>
   );
 }

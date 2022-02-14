@@ -75,6 +75,8 @@ export function Programs(): JSX.Element {
     setIsModalOpen(false);
   }, [programId, del, fetchProgramsData, response.ok]);
 
+  const handleCreateProgram = useCallback(() => navigate('new'), [navigate]);
+
   const handleEditProgram = useCallback(
     (id: string | undefined) => {
       if (id) navigate(id);
@@ -88,7 +90,11 @@ export function Programs(): JSX.Element {
 
   return (
     <Box>
-      <CrudHeader title="Cursos" />
+      <CrudHeader
+        title="Cursos"
+        showButton
+        onClickButton={handleCreateProgram}
+      />
 
       <TableContainer component={Paper}>
         <Table size="medium">

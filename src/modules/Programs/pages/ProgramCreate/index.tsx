@@ -1,14 +1,13 @@
 import { Box, Grid, MenuItem } from '@mui/material';
 import { useFormik } from 'formik';
 import { useCallback, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import useFetch from 'use-http';
 import * as Yup from 'yup';
 
-import { ICampus, IProgram } from '../../../../@types/entities';
+import { ICampus } from '../../../../@types/entities';
 import { CrudHeader } from '../../../../components/CrudHeader';
-import { isUUID, roleNames } from '../../../../helpers';
+import { roleNames } from '../../../../helpers';
 import { useAuth } from '../../../../hooks/AuthContext';
 import { FormInput } from '../../../../components/FormInput';
 import { FormPaper } from '../../../../components/FormPaper';
@@ -16,7 +15,7 @@ import { FormFooter } from '../../../../components/FormFooter';
 import { SaveButton } from '../../../../components/SaveButton';
 import { FormSelect } from '../../../../components/FormSelect';
 
-interface IProgramEditValues {
+interface IProgramCreateValues {
   name: string;
   campus_id: string;
 }
@@ -24,14 +23,11 @@ interface IProgramEditValues {
 export function Program(): JSX.Element {
   document.title = 'Curso | Lion';
 
-  const [program, setProgram] = useState<IProgram | undefined>();
   const [campuses, setCampuses] = useState<ICampus[]>([]);
 
-  const { id } = useParams();
   const { authenticated, userAuthenticated } = useAuth();
   const {
-    get: getProgram,
-    put: putProgram,
+    post: postProgram,
     response: responseProgram,
     loading: loadingProgram,
   } = useFetch('/programs');
@@ -48,37 +44,19 @@ export function Program(): JSX.Element {
     campus_id: Yup.string().required('Campus é obrigatório'),
   });
 
-  const editForm = useFormik({
+  const createForm = useFormik({
     enableReinitialize: true,
     validateOnBlur: false,
     validateOnChange: false,
     initialValues: {
-      name: program?.name ?? '',
-      campus_id: program?.campus_id ?? '',
+      name: '',
+      campus_id: '',
     },
     validationSchema,
     onSubmit: async (values) => {
-      await editProgram(values);
+      await createProgram(values);
     },
   });
-
-  const fetchProgramData = useCallback(async () => {
-    if (authenticated) {
-      if (userAuthenticated.role === roleNames.admin) {
-        if (isUUID(id)) {
-          await getProgram(id);
-
-          if (responseProgram.ok) {
-            setProgram(responseProgram.data);
-          } else {
-            toast.error(
-              'Falha ao obter os dados do curso. Tente novamente mais tarde.'
-            );
-          }
-        }
-      }
-    }
-  }, [authenticated, getProgram, id, responseProgram, userAuthenticated.role]);
 
   const fetchCampusesData = useCallback(async () => {
     if (authenticated) {
@@ -96,46 +74,49 @@ export function Program(): JSX.Element {
     }
   }, [authenticated, getCampuses, responseCampuses, userAuthenticated.role]);
 
-  const editProgram = useCallback(
-    async (values: IProgramEditValues) => {
+  const createProgram = useCallback(
+    async (values: IProgramCreateValues) => {
       if (authenticated) {
         if (userAuthenticated.role === roleNames.admin) {
-          if (isUUID(id)) {
-            await putProgram(id, values);
+          await postProgram(values);
 
-            if (responseProgram.ok) {
-              setProgram(responseProgram.data);
-              toast.success('Curso editado com sucesso.');
-            } else {
-              toast.error(
-                'Falha ao editar este curso. Tente novamente mais tarde.'
-              );
-            }
+          if (responseProgram.ok) {
+            createForm.resetForm();
+            toast.success('Curso criado com sucesso.');
+          } else {
+            toast.error(
+              'Falha ao criar este curso. Tente novamente mais tarde.'
+            );
           }
         }
       }
     },
-    [authenticated, id, putProgram, responseProgram, userAuthenticated.role]
+    [
+      authenticated,
+      createForm,
+      postProgram,
+      responseProgram.ok,
+      userAuthenticated.role,
+    ]
   );
 
   useEffect(() => {
     fetchCampusesData();
-    fetchProgramData();
-  }, [fetchCampusesData, fetchProgramData]);
+  }, [fetchCampusesData]);
 
   return (
     <Box flexGrow={1}>
-      <CrudHeader title="Editar curso" />
+      <CrudHeader title="Novo curso" />
 
       <FormPaper>
-        <form onSubmit={editForm.handleSubmit}>
+        <form onSubmit={createForm.handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} md={8}>
               <FormInput
                 label="Nome"
                 placeholder="Digite o nome"
                 name="name"
-                formAttributes={editForm}
+                formAttributes={createForm}
                 autoComplete="off"
                 fullWidth
               />
@@ -143,9 +124,10 @@ export function Program(): JSX.Element {
 
             <Grid item xs={12} md={4}>
               <FormSelect
-                formAttributes={editForm}
+                formAttributes={createForm}
                 name="campus_id"
-                value={editForm.values.campus_id}
+                label="Campus"
+                value={createForm.values.campus_id}
                 disabled={loadingCampuses}
                 fullWidth
               >
