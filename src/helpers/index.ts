@@ -31,5 +31,23 @@ export function dayNumberToString(number: number): string {
 
 export const roleNames = {
   admin: 'admin',
+  professor: 'professor',
   student_tutor: 'student_tutor',
 };
+
+export function translateRole(
+  name: string | undefined,
+  lowerCase = false
+): string {
+  switch (name) {
+    case roleNames.admin:
+      return lowerCase ? 'administrador' : 'Administrador';
+    case roleNames.professor:
+      return lowerCase ? 'professor' : 'Professor';
+    case roleNames.student_tutor:
+      return lowerCase ? 'monitor' : 'Monitor';
+    default:
+      break;
+  }
+  return '';
+}

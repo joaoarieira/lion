@@ -1,11 +1,24 @@
 type uuid = string;
 
-export interface IUser {
+export interface IUser extends IUserRelations {
   id: uuid;
   role_id: uuid;
   name: string;
   email: string;
   is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+interface IUserRelations {
+  role?: IRole;
+  student_tutorings?: IStudentTutoring[]; // professor que supervisiona
+  student_tutoring_tutors?: IStudentTutoringTutor[]; // monitor que dá aula
+}
+
+export interface IRole {
+  id: uuid;
+  name: string;
   created_at: string;
   updated_at: string;
 }
