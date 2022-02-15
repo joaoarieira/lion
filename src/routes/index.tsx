@@ -2,7 +2,6 @@ import { lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import StudentTutorings from '../modules/StudentTutorings';
 import StudentTutoringTutors from '../modules/StudentTutoringTutors';
-import Users from '../modules/Users';
 
 const RequireAuth = lazy(() => import('../components/RequireAuth'));
 const Home = lazy(() => import('../modules/Home'));
@@ -13,12 +12,16 @@ const SignIn = lazy(() => import('../pages/SignIn'));
 const SignOut = lazy(() => import('../pages/SignOut'));
 const About = lazy(() => import('../pages/About'));
 const Notices = lazy(() => import('../pages/Notices'));
-const Campuses = lazy(() => import('../modules/Campuses/pages/Campuses'));
+const CampusesList = lazy(
+  () => import('../modules/Campuses/pages/CampusesList')
+);
 const CampusEdit = lazy(() => import('../modules/Campuses/pages/CampusEdit'));
 const CampusCreate = lazy(
   () => import('../modules/Campuses/pages/CampusCreate')
 );
-const Programs = lazy(() => import('../modules/Programs/pages/Programs'));
+const ProgramsList = lazy(
+  () => import('../modules/Programs/pages/ProgramsList')
+);
 const ProgramEdit = lazy(() => import('../modules/Programs/pages/ProgramEdit'));
 const ProgramCreate = lazy(
   () => import('../modules/Programs/pages/ProgramCreate')
@@ -26,6 +29,7 @@ const ProgramCreate = lazy(
 const StudentTutoringTutorDetails = lazy(
   () => import('../pages/StudentTutoringTutorDetails')
 );
+const UsersList = lazy(() => import('../modules/Users/pages/UsersList'));
 
 export function AppRoutes(): JSX.Element {
   return (
@@ -42,7 +46,7 @@ export function AppRoutes(): JSX.Element {
         path="campuses"
         element={
           <RequireAuth>
-            <Campuses />
+            <CampusesList />
           </RequireAuth>
         }
       />
@@ -67,7 +71,7 @@ export function AppRoutes(): JSX.Element {
         path="programs"
         element={
           <RequireAuth>
-            <Programs />
+            <ProgramsList />
           </RequireAuth>
         }
       />
@@ -92,7 +96,23 @@ export function AppRoutes(): JSX.Element {
         path="users"
         element={
           <RequireAuth>
-            <Users />
+            <UsersList />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="users/:id"
+        element={
+          <RequireAuth>
+            <UsersList />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="users/new"
+        element={
+          <RequireAuth>
+            <UsersList />
           </RequireAuth>
         }
       />

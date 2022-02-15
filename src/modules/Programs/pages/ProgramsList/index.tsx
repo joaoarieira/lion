@@ -20,7 +20,7 @@ import { roleNames } from '../../../../helpers';
 import { useAuth } from '../../../../hooks/AuthContext';
 import { ActionsCell } from '../../../../components/ActionsCell';
 
-export function Programs(): JSX.Element {
+export function ProgramsList(): JSX.Element {
   document.title = 'Cursos | Lion';
 
   const [programs, setPrograms] = useState<IProgram[]>([]);
@@ -132,4 +132,4 @@ export function Programs(): JSX.Element {
   );
 }
 
-export default Programs;
+export default ProgramsList;

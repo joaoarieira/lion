@@ -20,7 +20,7 @@ import { roleNames } from '../../../../helpers';
 import { useAuth } from '../../../../hooks/AuthContext';
 import { ActionsCell } from '../../../../components/ActionsCell';
 
-export function Campuses(): JSX.Element {
+export function CampusesList(): JSX.Element {
   document.title = 'Campi | Lion';
 
   const [campuses, setCampuses] = useState<ICampus[]>([]);
@@ -128,4 +128,4 @@ export function Campuses(): JSX.Element {
   );
 }
 
-export default Campuses;
+export default CampusesList;
