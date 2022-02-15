@@ -16,7 +16,7 @@ import useFetch from 'use-http';
 import { IUser } from '../../../../@types/entities';
 import { CrudHeader } from '../../../../components/CrudHeader';
 import { DeleteDialog } from '../../../../components/DeleteDialog';
-import { roleNames, translateRole } from '../../../../helpers';
+import { formatDateTime, roleNames, translateRole } from '../../../../helpers';
 import { useAuth } from '../../../../hooks/AuthContext';
 import { ActionsCell } from '../../../../components/ActionsCell';
 import { Status } from '../../../../components/Status';
@@ -129,7 +129,9 @@ export function UsersList(): JSX.Element {
                 <TableCell component="th">
                   <Status isActive={user.is_active} />
                 </TableCell>
-                <TableCell component="th">{user.created_at}</TableCell>
+                <TableCell component="th">
+                  {formatDateTime(user.created_at)}
+                </TableCell>
                 <ActionsCell
                   hideToggle
                   onClickEdit={() => handleEditUser(user.id)}

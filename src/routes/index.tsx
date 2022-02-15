@@ -30,6 +30,8 @@ const StudentTutoringTutorDetails = lazy(
   () => import('../pages/StudentTutoringTutorDetails')
 );
 const UsersList = lazy(() => import('../modules/Users/pages/UsersList'));
+const UserCreate = lazy(() => import('../modules/Users/pages/UserCreate'));
+const UserEdit = lazy(() => import('../modules/Users/pages/UserEdit'));
 
 export function AppRoutes(): JSX.Element {
   return (
@@ -104,7 +106,7 @@ export function AppRoutes(): JSX.Element {
         path="users/:id"
         element={
           <RequireAuth>
-            <UsersList />
+            <UserEdit />
           </RequireAuth>
         }
       />
@@ -112,7 +114,7 @@ export function AppRoutes(): JSX.Element {
         path="users/new"
         element={
           <RequireAuth>
-            <UsersList />
+            <UserCreate />
           </RequireAuth>
         }
       />

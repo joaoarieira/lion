@@ -20,7 +20,7 @@ interface IProgramCreateValues {
   campus_id: string;
 }
 
-export function Program(): JSX.Element {
+export function ProgramCreate(): JSX.Element {
   document.title = 'Curso | Lion';
 
   const [campuses, setCampuses] = useState<ICampus[]>([]);
@@ -149,4 +149,4 @@ export function Program(): JSX.Element {
   );
 }
 
-export default Program;
+export default ProgramCreate;

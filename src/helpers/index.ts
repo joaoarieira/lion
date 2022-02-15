@@ -1,3 +1,6 @@
+import { format, parseISO } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
+
 export function isUUID(uuid: string | undefined): boolean {
   const regexExp =
     /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/gi;
@@ -49,5 +52,16 @@ export function translateRole(
     default:
       break;
   }
+  return '';
+}
+
+export function formatTime(time: string | undefined): string {
+  if (time) return format(parseISO(time), 'HH:mm', { locale: ptBR });
+  return '';
+}
+
+export function formatDateTime(datetime: string | undefined): string {
+  if (datetime)
+    return format(parseISO(datetime), 'dd/MM/yyyy - HH:mm', { locale: ptBR });
   return '';
 }
