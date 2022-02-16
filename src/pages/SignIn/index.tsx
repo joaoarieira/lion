@@ -1,4 +1,4 @@
-import { Button, Container, Grid } from '@mui/material';
+import { Button, Container, Grid, Typography } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/AuthContext';
@@ -71,13 +71,13 @@ export function SignIn(): JSX.Element {
           alignItems="center"
           justifyContent="center"
           spacing="1rem"
-          style={{ minHeight: 'calc(100vh - 110px)' }}
+          style={{ minHeight: 'calc(100vh - 160px)' }}
         >
           {incorrectPassword && (
             <Grid item>
-              <span style={{ color: 'red' }}>
+              <Typography color="error">
                 Verifique as informações inseridas!
-              </span>
+              </Typography>
             </Grid>
           )}
 

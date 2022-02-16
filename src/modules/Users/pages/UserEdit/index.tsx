@@ -14,10 +14,11 @@ import { SaveButton } from '../../../../components/SaveButton';
 import { IUser } from '../../../../@types/entities';
 import { useParams } from 'react-router-dom';
 import { CrudHeader } from '../../../../components/CrudHeader';
+import SwitchLabel from '../../../../components/SwitchLabel';
 
 interface IUserEditValues {
   name: string;
-  email: string;
+  email?: string;
   password?: string;
   is_active: boolean;
 }
@@ -56,13 +57,18 @@ export function UserEdit(): JSX.Element {
       is_active: user?.is_active ?? false,
     },
     validationSchema,
-    onSubmit: async ({ password, password_confirmation, ...values }) => {
+    onSubmit: async ({ password, password_confirmation, email, ...values }) => {
       let preparedValues = values as IUserEditValues;
       if (password.length > 8) {
         if (password === password_confirmation) {
-          preparedValues = { password, ...values };
+          preparedValues = { password, ...preparedValues };
         }
       }
+
+      if (email !== editForm.initialValues.email) {
+        preparedValues = { email, ...preparedValues };
+      }
+
       await editUser(preparedValues);
     },
   });
@@ -92,7 +98,7 @@ export function UserEdit(): JSX.Element {
           await put(id, values);
 
           if (response.ok) {
-            editForm.resetForm();
+            setUser(response.data);
             toast.success('Usuário editado com sucesso.');
           } else {
             toast.error(
@@ -102,7 +108,14 @@ export function UserEdit(): JSX.Element {
         }
       }
     },
-    [authenticated, editForm, id, put, response.ok, userAuthenticated.role]
+    [authenticated, id, put, response, userAuthenticated.role]
+  );
+
+  const handleChangeStatus = useCallback(
+    ({ target: { checked } }: React.ChangeEvent<HTMLInputElement>) => {
+      editForm.setFieldValue('is_active', checked);
+    },
+    [editForm]
   );
 
   useEffect(() => {
@@ -138,7 +151,7 @@ export function UserEdit(): JSX.Element {
               />
             </Grid>
 
-            <Grid item xs={12} md={5}>
+            <Grid item xs={12} md={6}>
               <FormInput
                 label="Senha"
                 type="password"
@@ -150,7 +163,7 @@ export function UserEdit(): JSX.Element {
               />
             </Grid>
 
-            <Grid item xs={12} md={5}>
+            <Grid item xs={12} md={6}>
               <FormInput
                 label="Confirme a senha"
                 type="password"
@@ -162,10 +175,12 @@ export function UserEdit(): JSX.Element {
               />
             </Grid>
 
-            <Grid item xs={12} md={2}>
-              <div style={{ background: 'red' }}>
-                {user?.is_active ? 'Desativar' : 'Ativar'}
-              </div>
+            <Grid item xs={1}>
+              <SwitchLabel
+                label={editForm.values.is_active ? 'Ativo' : 'Inativo'}
+                checked={editForm.values.is_active}
+                onChange={handleChangeStatus}
+              />
             </Grid>
           </Grid>
 

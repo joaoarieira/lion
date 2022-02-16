@@ -21,15 +21,18 @@ import { useAuth } from '../../../../hooks/AuthContext';
 import { ActionsCell } from '../../../../components/ActionsCell';
 import { Status } from '../../../../components/Status';
 import { DeleteDialogContent } from '../../components/DeleteDialogContent';
+import { ChangeStatusDialog } from '../../../../components/ChangeStatusDialog';
 
 export function UsersList(): JSX.Element {
   document.title = 'Cursos | Lion';
 
   const [users, setUsers] = useState<IUser[]>([]);
   const [userId, setUserId] = useState<string | undefined>();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [userStatus, setUserStatus] = useState<boolean | undefined>();
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
 
-  const { get, del, response } = useFetch('/users');
+  const { get, del, put, response } = useFetch('/users');
   const { authenticated, userAuthenticated } = useAuth();
   const navigate = useNavigate();
 
@@ -85,8 +88,16 @@ export function UsersList(): JSX.Element {
     return false;
   }, []);
 
-  const handleOpenModal = useCallback((id: string) => {
-    setIsModalOpen(true);
+  const canChangeStatus = useCallback((user: IUser) => {
+    // não é possível alterar o status de um admin
+    if (user.role?.name !== roleNames.admin) {
+      return true;
+    }
+    return false;
+  }, []);
+
+  const handleOpenDeleteModal = useCallback((id: string) => {
+    setIsDeleteModalOpen(true);
     setUserId(id);
   }, []);
 
@@ -100,8 +111,29 @@ export function UsersList(): JSX.Element {
       toast.error('Falha ao excluir registro. Tente novamente mais tarde.');
     }
 
-    setIsModalOpen(false);
+    setIsDeleteModalOpen(false);
   }, [userId, del, fetchUsersData, response.ok]);
+
+  const handleOpenStatusModal = useCallback((id: string, status: boolean) => {
+    setIsStatusModalOpen(true);
+    setUserId(id);
+    setUserStatus(status);
+  }, []);
+
+  const handleChangeStatusUser = useCallback(async () => {
+    await put(userId, { is_active: !userStatus });
+
+    if (response.ok) {
+      toast.success(
+        `Usuário ${userStatus ? 'desativado' : 'ativado'} com sucesso.`
+      );
+      fetchUsersData();
+    } else {
+      toast.error('Falha ao alterar registro. Tente novamente mais tarde.');
+    }
+
+    setIsStatusModalOpen(false);
+  }, [put, userId, userStatus, response.ok, fetchUsersData]);
 
   const handleCreateUser = useCallback(() => navigate('new'), [navigate]);
 
@@ -152,10 +184,15 @@ export function UsersList(): JSX.Element {
                   {formatDateTime(user.created_at)}
                 </TableCell>
                 <ActionsCell
-                  hideToggle
+                  disableToggle={!canChangeStatus(user)}
+                  onClickToggle={
+                    user.role?.name !== roleNames.admin
+                      ? () => handleOpenStatusModal(user.id, user.is_active)
+                      : undefined
+                  }
                   onClickEdit={() => handleEditUser(user.id)}
                   disableDelete={!canDelete(user)}
-                  onClickDelete={() => handleOpenModal(user.id)}
+                  onClickDelete={() => handleOpenDeleteModal(user.id)}
                 />
               </TableRow>
             ))}
@@ -164,12 +201,19 @@ export function UsersList(): JSX.Element {
       </TableContainer>
 
       <DeleteDialog
-        open={isModalOpen}
-        handleClose={() => setIsModalOpen(false)}
+        open={isDeleteModalOpen}
+        handleClose={() => setIsDeleteModalOpen(false)}
         handleConfirm={handleDeleteUser}
         customContent={
           isUserStudentTutor(userId) ? <DeleteDialogContent /> : undefined
         }
+      />
+
+      <ChangeStatusDialog
+        isActive={userStatus ?? false}
+        open={isStatusModalOpen}
+        handleClose={() => setIsStatusModalOpen(false)}
+        handleConfirm={handleChangeStatusUser}
       />
     </Box>
   );

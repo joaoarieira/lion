@@ -10,7 +10,7 @@ import {
 } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import useFetch from 'use-http';
+import useFetch, { CachePolicies } from 'use-http';
 import jwt_decode from 'jwt-decode';
 
 interface IJwtDecodedInfos {
@@ -42,7 +42,6 @@ export const AuthProvider = ({
 }: IAuthProviderProps): ReactElement => {
   const [authenticated, setAuthenticated] = useState(false);
   const [token, setToken] = useState('');
-  const [loading, setLoading] = useState(false);
   const [userAuthenticated, setUserAuthenticated] = useState<IUser>({
     name: '',
     role: '',
@@ -52,11 +51,11 @@ export const AuthProvider = ({
 
   const { post, response } = useFetch(process.env.REACT_APP_BACKEND_URL, {
     suspense: true,
+    cachePolicy: CachePolicies.NO_CACHE,
   });
 
   const handleLogin = useCallback(
     async (username: string, password: string): Promise<boolean> => {
-      setLoading(true);
       await post('/auth/login', { username, password });
 
       if (response.ok) {
@@ -78,13 +77,12 @@ export const AuthProvider = ({
         );
       } else {
         setAuthenticated(false);
-        localStorage.setItem('@Lion:token', '');
+        localStorage.removeItem('@Lion:token');
         console.error(response);
         if (response.status === undefined || response.status >= 500) {
           toast.error('Ocorreu um erro interno ao logar. Tente mais tarde.');
         }
       }
-      setLoading(false);
       return response.ok ?? false;
     },
     [post, response]
@@ -126,9 +124,9 @@ export const AuthProvider = ({
     [authenticated, token, userAuthenticated, handleLogin, handleLogout]
   );
 
-  if (loading) {
-    return <div>Carregando...</div>;
-  }
+  // if (loading) {
+  //   return <div>Carregando...</div>;
+  // }
 
   return (
     <AuthContext.Provider value={memoizedContextValue}>
