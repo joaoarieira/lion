@@ -11,11 +11,13 @@ import {
 interface IDeleteDialogProps extends DialogProps {
   handleClose: React.MouseEventHandler<HTMLButtonElement>;
   handleConfirm: React.MouseEventHandler<HTMLButtonElement>;
+  customContent?: React.ReactNode;
 }
 
 export function DeleteDialog({
   handleClose,
   handleConfirm,
+  customContent,
   ...dialogProps
 }: IDeleteDialogProps): JSX.Element {
   return (
@@ -29,11 +31,15 @@ export function DeleteDialog({
         Deseja realmente excluir este registro?
       </DialogTitle>
 
-      <DialogContent>
-        <DialogContentText id="alert-dialog-description">
-          Tenha certeza do que está fazendo. Esta ação é <b>irreversível</b>.
-        </DialogContentText>
-      </DialogContent>
+      {!customContent ? (
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Tenha certeza do que está fazendo. Esta ação é <b>irreversível</b>.
+          </DialogContentText>
+        </DialogContent>
+      ) : (
+        customContent
+      )}
 
       <DialogActions>
         <Button onClick={handleClose}>Cancelar</Button>

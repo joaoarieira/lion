@@ -20,6 +20,7 @@ import { formatDateTime, roleNames, translateRole } from '../../../../helpers';
 import { useAuth } from '../../../../hooks/AuthContext';
 import { ActionsCell } from '../../../../components/ActionsCell';
 import { Status } from '../../../../components/Status';
+import { DeleteDialogContent } from '../../components/DeleteDialogContent';
 
 export function UsersList(): JSX.Element {
   document.title = 'Cursos | Lion';
@@ -48,6 +49,20 @@ export function UsersList(): JSX.Element {
     }
   }, [authenticated, get, response, userAuthenticated.role]);
 
+  const isUserStudentTutor = useCallback(
+    (id: string | undefined): boolean => {
+      if (id) {
+        return users.some(
+          (user) =>
+            user.id === id && user.role?.name === roleNames.student_tutor
+        );
+      }
+
+      return false;
+    },
+    [users]
+  );
+
   const canDelete = useCallback((user: IUser) => {
     // não é possível excluir: um admin e
     // um professor relacionado a uma monitoria
@@ -57,9 +72,13 @@ export function UsersList(): JSX.Element {
 
     if (user.role?.name === roleNames.professor) {
       if (user.student_tutorings) {
-        if (user.student_tutorings.length === 0) {
+        if (user.student_tutorings.length > 0) {
+          return false;
+        } else {
           return true;
         }
+      } else {
+        return true;
       }
     }
 
@@ -148,6 +167,9 @@ export function UsersList(): JSX.Element {
         open={isModalOpen}
         handleClose={() => setIsModalOpen(false)}
         handleConfirm={handleDeleteUser}
+        customContent={
+          isUserStudentTutor(userId) ? <DeleteDialogContent /> : undefined
+        }
       />
     </Box>
   );

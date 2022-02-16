@@ -15,6 +15,8 @@ import { FormFooter } from '../../../../components/FormFooter';
 import { SaveButton } from '../../../../components/SaveButton';
 import { FormSelect } from '../../../../components/FormSelect';
 
+// TODO: colocar opção para vincular monitor à monitoria ao cadastrá-lo
+
 interface IUserCreateValues {
   name: string;
   email: string;
@@ -47,6 +49,9 @@ export function UserCreate(): JSX.Element {
     password: Yup.string()
       .min(8, 'Mínimo 8 caracteres')
       .required('Senha é obrigatória'),
+    password_confirmation: Yup.string()
+      .oneOf([Yup.ref('password'), undefined], 'Confirmação divergente')
+      .required('Confirme a senha'),
     role_id: Yup.string().required('Nível é obrigatório'),
   });
 
@@ -58,6 +63,7 @@ export function UserCreate(): JSX.Element {
       name: '',
       email: '',
       password: '',
+      password_confirmation: '',
       role_id: '',
     },
     validationSchema,
@@ -114,10 +120,10 @@ export function UserCreate(): JSX.Element {
 
   return (
     <Box flexGrow={1}>
-      <CrudHeader title="Novo curso" />
+      <CrudHeader title="Novo usuário" />
 
       <FormPaper>
-        <form onSubmit={createForm.handleSubmit}>
+        <form autoComplete="off" onSubmit={createForm.handleSubmit}>
           <Grid container rowSpacing={4} columnSpacing={2}>
             <Grid item xs={12} md={6}>
               <FormInput
@@ -141,7 +147,7 @@ export function UserCreate(): JSX.Element {
               />
             </Grid>
 
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={4}>
               <FormInput
                 label="Senha"
                 type="password"
@@ -153,13 +159,23 @@ export function UserCreate(): JSX.Element {
               />
             </Grid>
 
-            {/* password confirmation, corrigir bug do student_tutorings_ids vazio */}
+            <Grid item xs={12} md={4}>
+              <FormInput
+                label="Confirme a senha"
+                type="password"
+                placeholder="Digite a senha novamente"
+                name="password_confirmation"
+                formAttributes={createForm}
+                autoComplete="off"
+                fullWidth
+              />
+            </Grid>
 
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={4}>
               <FormSelect
                 formAttributes={createForm}
                 name="role_id"
-                label="Role"
+                label="Nível de acesso"
                 value={createForm.values.role_id}
                 disabled={loadingRoles}
                 fullWidth
