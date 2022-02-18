@@ -22,6 +22,7 @@ import {
 } from './styles';
 import {
   AccountBalance,
+  AssignmentIndOutlined,
   ChevronLeftOutlined,
   HistoryEduOutlined,
   HomeOutlined,
@@ -116,6 +117,11 @@ export const Layout = ({ children }: ILayoutProps): JSX.Element => {
         text: 'Monitorias',
         icon: <HistoryEduOutlined />,
         path: '/student-tutorings',
+      },
+      {
+        text: 'Monitores',
+        icon: <AssignmentIndOutlined />,
+        path: '/student-tutoring-tutors',
       },
     ],
     []

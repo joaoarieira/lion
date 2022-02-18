@@ -75,6 +75,7 @@ export interface IStudentTutoringTutor extends IStudentTutoringTutorRelations {
 interface IStudentTutoringTutorRelations {
   student_tutoring?: IStudentTutoring;
   tutor?: IUser;
+  professor?: IUser;
   class_schedules?: IClassSchedules[];
 }
 

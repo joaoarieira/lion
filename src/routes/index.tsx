@@ -1,6 +1,5 @@
 import { lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import StudentTutoringTutors from '../modules/StudentTutoringTutors';
 
 const RequireAuth = lazy(() => import('../components/RequireAuth'));
 const Home = lazy(() => import('../modules/Home'));
@@ -39,6 +38,18 @@ const StudentTutoringCreate = lazy(
 );
 const StudentTutoringEdit = lazy(
   () => import('../modules/StudentTutorings/pages/StudentTutoringEdit')
+);
+const StudentTutoringTutorsList = lazy(
+  () =>
+    import('../modules/StudentTutoringTutors/pages/StudentTutoringTutorsList')
+);
+const StudentTutoringTutorCreate = lazy(
+  () =>
+    import('../modules/StudentTutoringTutors/pages/StudentTutoringTutorCreate')
+);
+const StudentTutoringTutorEdit = lazy(
+  () =>
+    import('../modules/StudentTutoringTutors/pages/StudentTutoringTutorEdit')
 );
 
 export function AppRoutes(): JSX.Element {
@@ -156,7 +167,23 @@ export function AppRoutes(): JSX.Element {
         path="student-tutoring-tutors"
         element={
           <RequireAuth>
-            <StudentTutoringTutors />
+            <StudentTutoringTutorsList />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="student-tutoring-tutors/:id"
+        element={
+          <RequireAuth>
+            <StudentTutoringTutorEdit />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="student-tutoring-tutors/new"
+        element={
+          <RequireAuth>
+            <StudentTutoringTutorCreate />
           </RequireAuth>
         }
       />
