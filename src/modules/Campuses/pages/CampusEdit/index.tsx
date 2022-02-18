@@ -76,6 +76,7 @@ export function CampusEdit(): JSX.Element {
               setCampus(response.data);
               toast.success('Campus editado com sucesso.');
             } else {
+              editForm.resetForm();
               toast.error(
                 'Falha ao editar este campus. Tente novamente mais tarde.'
               );
@@ -84,7 +85,7 @@ export function CampusEdit(): JSX.Element {
         }
       }
     },
-    [authenticated, id, put, response, userAuthenticated.role]
+    [authenticated, id, put, response, editForm, userAuthenticated.role]
   );
 
   useEffect(() => {

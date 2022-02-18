@@ -101,6 +101,7 @@ export function UserEdit(): JSX.Element {
             setUser(response.data);
             toast.success('Usuário editado com sucesso.');
           } else {
+            editForm.resetForm();
             toast.error(
               'Falha ao editar este usuário. Tente novamente mais tarde.'
             );
@@ -108,7 +109,7 @@ export function UserEdit(): JSX.Element {
         }
       }
     },
-    [authenticated, id, put, response, userAuthenticated.role]
+    [authenticated, editForm, id, put, response, userAuthenticated.role]
   );
 
   const handleChangeStatus = useCallback(

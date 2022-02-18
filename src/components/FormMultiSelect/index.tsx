@@ -62,6 +62,8 @@ export default function FormMultiSelect({
       <Autocomplete
         multiple
         options={options}
+        value={formAttributes.values[name]}
+        isOptionEqualToValue={(option, value) => option.id === value.id}
         disableCloseOnSelect
         getOptionLabel={(option) => option.name}
         renderOption={(props, option, { selected }) => (
@@ -81,6 +83,7 @@ export default function FormMultiSelect({
             label={label}
             placeholder={placeholder}
             error={isErroed}
+            value={formAttributes.values[name]}
           />
         )}
         onChange={handleChange}

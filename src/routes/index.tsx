@@ -37,6 +37,9 @@ const StudentTutoringsList = lazy(
 const StudentTutoringCreate = lazy(
   () => import('../modules/StudentTutorings/pages/StudentTutoringCreate')
 );
+const StudentTutoringEdit = lazy(
+  () => import('../modules/StudentTutorings/pages/StudentTutoringEdit')
+);
 
 export function AppRoutes(): JSX.Element {
   return (
@@ -136,7 +139,7 @@ export function AppRoutes(): JSX.Element {
         path="student-tutorings/:id"
         element={
           <RequireAuth>
-            <StudentTutoringsList />
+            <StudentTutoringEdit />
           </RequireAuth>
         }
       />

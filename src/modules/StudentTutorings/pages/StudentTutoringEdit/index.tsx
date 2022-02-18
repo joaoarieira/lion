@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import useFetch from 'use-http';
 import * as Yup from 'yup';
 
-import { IProgram } from '../../../../@types/entities';
+import { IProgram, IStudentTutoring } from '../../../../@types/entities';
 import { CrudHeader } from '../../../../components/CrudHeader';
 import { roleNames } from '../../../../helpers';
 import { useAuth } from '../../../../hooks/AuthContext';
@@ -14,9 +14,10 @@ import { FormPaper } from '../../../../components/FormPaper';
 import { FormFooter } from '../../../../components/FormFooter';
 import { SaveButton } from '../../../../components/SaveButton';
 import FormMultiSelect from '../../../../components/FormMultiSelect';
+import { useParams } from 'react-router-dom';
 
-interface IStudentTutoringCreateValues {
-  course_code: string;
+interface IStudentTutoringEditValues {
+  course_code?: string;
   course_name: string;
   programs: IProgramOption[];
 }
@@ -26,14 +27,19 @@ interface IProgramOption {
   name: string;
 }
 
-interface IPostValues extends Omit<IStudentTutoringCreateValues, 'programs'> {
+interface IPutValues extends Omit<IStudentTutoringEditValues, 'programs'> {
   programs_ids: string[];
 }
 
-export function StudentTutoringCreate(): JSX.Element {
+export function StudentTutoringEdit(): JSX.Element {
   document.title = 'Monitoria | Lion';
 
+  const { id } = useParams();
+
   const [programs, setPrograms] = useState<IProgramOption[]>([]);
+  const [studentTutoring, setStudentTutoring] = useState<
+    IStudentTutoring | undefined
+  >();
 
   const { authenticated, userAuthenticated } = useAuth();
   const {
@@ -42,7 +48,8 @@ export function StudentTutoringCreate(): JSX.Element {
     loading: loadingPrograms,
   } = useFetch('/programs');
   const {
-    post: postStudentTutoring,
+    get: getStudentTutoring,
+    put: putStudentTutoring,
     response: responseStudentTutoring,
     loading: loadingStudentTutoring,
   } = useFetch('/student-tutorings');
@@ -60,17 +67,21 @@ export function StudentTutoringCreate(): JSX.Element {
       .min(1, 'Curso é obrigatório'),
   });
 
-  const createForm = useFormik({
+  const editForm = useFormik({
     enableReinitialize: true,
     validateOnChange: false,
     initialValues: {
-      course_code: '',
-      course_name: '',
-      programs: [],
+      course_code: studentTutoring?.course_code ?? '',
+      course_name: studentTutoring?.course_name ?? '',
+      programs:
+        studentTutoring?.student_tutoring_programs?.map((item) => ({
+          id: item.program?.id ?? '',
+          name: item.program?.name ?? '',
+        })) ?? [],
     },
     validationSchema,
     onSubmit: async (values) => {
-      await createStudentTutoring(values);
+      await editStudentTutoring(values);
     },
   });
 
@@ -95,27 +106,67 @@ export function StudentTutoringCreate(): JSX.Element {
     }
   }, [authenticated, getPrograms, responsePrograms, userAuthenticated.role]);
 
-  const preparePostValues = useCallback(
-    (values: IStudentTutoringCreateValues): IPostValues => {
-      const { programs, ...rest } = values;
+  const fetchStudentTutoringData = useCallback(async () => {
+    if (authenticated) {
+      if (userAuthenticated.role === roleNames.admin) {
+        await getStudentTutoring(id);
+
+        if (responseStudentTutoring.ok) {
+          setStudentTutoring(responseStudentTutoring.data);
+        } else {
+          toast.error(
+            'Falha ao obter os dados da monitoria. Tente novamente mais tarde.'
+          );
+        }
+      }
+    }
+  }, [
+    authenticated,
+    getStudentTutoring,
+    id,
+    responseStudentTutoring,
+    userAuthenticated.role,
+  ]);
+
+  const preparePutValues = useCallback(
+    (values: IStudentTutoringEditValues): IPutValues => {
+      const { programs, course_code, ...rest } = values;
+      const preparedValues = { ...rest } as IPutValues;
+
+      if (course_code !== editForm.values.course_code) {
+        preparedValues.course_code = course_code;
+      }
+
       const programs_ids = programs.map((program) => program.id);
-      return { programs_ids, ...rest };
+      if (programs_ids.length > 0) {
+        preparedValues.programs_ids = programs_ids;
+      }
+      return preparedValues;
     },
-    []
+    [editForm.values.course_code]
   );
 
-  const createStudentTutoring = useCallback(
-    async (values: IStudentTutoringCreateValues) => {
+  const editStudentTutoring = useCallback(
+    async (values: IStudentTutoringEditValues) => {
       if (authenticated) {
         if (userAuthenticated.role === roleNames.admin) {
-          await postStudentTutoring(preparePostValues(values));
+          await putStudentTutoring(`${id}oi`, preparePutValues(values));
 
           if (responseStudentTutoring.ok) {
-            createForm.resetForm();
-            toast.success('Monitoria criada com sucesso.');
+            const responseData =
+              responseStudentTutoring.data as IStudentTutoring;
+            const newStudentTutoring = {
+              programs_ids: responseData.student_tutoring_programs?.map(
+                (item) => ({ id: item.program?.id, name: item.program?.name })
+              ),
+              ...responseData,
+            };
+            setStudentTutoring(newStudentTutoring);
+            toast.success('Monitoria editada com sucesso.');
           } else {
+            editForm.resetForm();
             toast.error(
-              'Falha ao criar esta monitoria. Tente novamente mais tarde.'
+              'Falha ao editar esta monitoria. Tente novamente mais tarde.'
             );
           }
         }
@@ -123,31 +174,33 @@ export function StudentTutoringCreate(): JSX.Element {
     },
     [
       authenticated,
-      createForm,
-      postStudentTutoring,
-      preparePostValues,
-      responseStudentTutoring.ok,
       userAuthenticated.role,
+      putStudentTutoring,
+      id,
+      preparePutValues,
+      responseStudentTutoring,
+      editForm,
     ]
   );
 
   useEffect(() => {
+    fetchStudentTutoringData();
     fetchProgramsData();
-  }, [fetchProgramsData]);
+  }, [fetchProgramsData, fetchStudentTutoringData]);
 
   return (
     <Box flexGrow={1}>
-      <CrudHeader title="Nova monitoria" />
+      <CrudHeader title="Editar monitoria" />
 
       <FormPaper>
-        <form onSubmit={createForm.handleSubmit}>
+        <form onSubmit={editForm.handleSubmit}>
           <Grid container columnSpacing={2} rowSpacing={4}>
             <Grid item xs={12} md={3}>
               <FormInput
                 label="Código"
                 placeholder="Digite o código"
                 name="course_code"
-                formAttributes={createForm}
+                formAttributes={editForm}
                 autoComplete="off"
                 fullWidth
               />
@@ -158,7 +211,7 @@ export function StudentTutoringCreate(): JSX.Element {
                 label="Nome"
                 placeholder="Digite o nome"
                 name="course_name"
-                formAttributes={createForm}
+                formAttributes={editForm}
                 autoComplete="off"
                 fullWidth
               />
@@ -166,7 +219,7 @@ export function StudentTutoringCreate(): JSX.Element {
 
             <Grid item xs={12} md={6}>
               <FormMultiSelect
-                formAttributes={createForm}
+                formAttributes={editForm}
                 name="programs"
                 label="Cursos"
                 options={programs}
@@ -184,4 +237,4 @@ export function StudentTutoringCreate(): JSX.Element {
   );
 }
 
-export default StudentTutoringCreate;
+export default StudentTutoringEdit;
