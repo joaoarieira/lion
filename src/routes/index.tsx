@@ -1,6 +1,5 @@
 import { lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import StudentTutorings from '../modules/StudentTutorings';
 import StudentTutoringTutors from '../modules/StudentTutoringTutors';
 
 const RequireAuth = lazy(() => import('../components/RequireAuth'));
@@ -32,6 +31,12 @@ const StudentTutoringTutorDetails = lazy(
 const UsersList = lazy(() => import('../modules/Users/pages/UsersList'));
 const UserCreate = lazy(() => import('../modules/Users/pages/UserCreate'));
 const UserEdit = lazy(() => import('../modules/Users/pages/UserEdit'));
+const StudentTutoringsList = lazy(
+  () => import('../modules/StudentTutorings/pages/StudentTutoringsList')
+);
+const StudentTutoringCreate = lazy(
+  () => import('../modules/StudentTutorings/pages/StudentTutoringCreate')
+);
 
 export function AppRoutes(): JSX.Element {
   return (
@@ -123,7 +128,23 @@ export function AppRoutes(): JSX.Element {
         path="student-tutorings"
         element={
           <RequireAuth>
-            <StudentTutorings />
+            <StudentTutoringsList />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="student-tutorings/:id"
+        element={
+          <RequireAuth>
+            <StudentTutoringsList />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="student-tutorings/new"
+        element={
+          <RequireAuth>
+            <StudentTutoringCreate />
           </RequireAuth>
         }
       />

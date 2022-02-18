@@ -12,8 +12,8 @@ export interface IUser extends IUserRelations {
 
 interface IUserRelations {
   role?: IRole;
-  student_tutorings?: IStudentTutoring[]; // professor que supervisiona
   student_tutoring_tutors?: IStudentTutoringTutor[]; // monitor que dá aula
+  student_tutoring_professors?: IStudentTutoringTutor[]; // professor que supervisiona
 }
 
 export interface IRole {
@@ -67,6 +67,7 @@ export interface IStudentTutoringTutor extends IStudentTutoringTutorRelations {
   id: uuid;
   student_tutoring_id: uuid;
   tutor_id: uuid;
+  professor_id: uuid;
   created_at: string;
   updated_at: string;
 }

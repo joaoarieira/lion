@@ -24,7 +24,7 @@ import { DeleteDialogContent } from '../../components/DeleteDialogContent';
 import { ChangeStatusDialog } from '../../../../components/ChangeStatusDialog';
 
 export function UsersList(): JSX.Element {
-  document.title = 'Cursos | Lion';
+  document.title = 'Usuários | Lion';
 
   const [users, setUsers] = useState<IUser[]>([]);
   const [userId, setUserId] = useState<string | undefined>();
@@ -74,8 +74,8 @@ export function UsersList(): JSX.Element {
     }
 
     if (user.role?.name === roleNames.professor) {
-      if (user.student_tutorings) {
-        if (user.student_tutorings.length > 0) {
+      if (user.student_tutoring_professors) {
+        if (user.student_tutoring_professors.length > 0) {
           return false;
         } else {
           return true;
