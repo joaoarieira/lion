@@ -32,6 +32,13 @@ export function dayNumberToString(number: number): string {
   return '';
 }
 
+export function removeSeconds(time: string | undefined | null): string {
+  if (time) {
+    return time.slice(0, 5);
+  }
+  return '';
+}
+
 export const daysOfTheWeekOptions = [
   { value: 0, name: 'Domingo' },
   { value: 1, name: 'Segunda-feira' },

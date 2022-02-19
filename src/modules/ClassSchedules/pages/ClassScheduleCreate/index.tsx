@@ -27,7 +27,7 @@ interface ClassScheduleCreateValues {
 }
 
 export function ClassScheduleCreate(): JSX.Element {
-  document.title = 'Campus | Lion';
+  document.title = 'Horário | Lion';
 
   const [studentTutoringTutor, setStudentTutoringTutor] = useState<
     IStudentTutoringTutor | undefined
@@ -127,7 +127,7 @@ export function ClassScheduleCreate(): JSX.Element {
           setStudentTutoringTutor(responseStudentTutoringTutor.data);
         } else {
           toast.error(
-            'Falha ao obter da monitoria. Tente novamente mais tarde.'
+            'Falha ao obter a monitoria. Tente novamente mais tarde.'
           );
         }
       }

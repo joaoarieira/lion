@@ -23,7 +23,7 @@ export function FormInput({
   return (
     <TextField
       onChange={onChange ? onChange : handleChange}
-      value={formAttributes.values[name]}
+      value={formAttributes.values[name] ?? ''}
       error={name in formAttributes.errors}
       helperText={formAttributes.errors[name]}
       {...textFieldProps}
