@@ -202,7 +202,7 @@ export function AppRoutes(): JSX.Element {
       />
 
       <Route
-        path="my-tutoring-tutors"
+        path="my-student-tutorings"
         element={
           <RequireAuth>
             <LinkedStudentTutoringList />
@@ -210,7 +210,7 @@ export function AppRoutes(): JSX.Element {
         }
       />
       <Route
-        path="my-tutoring-tutors/:id/class-schedules"
+        path="my-student-tutorings/:id/class-schedules"
         element={
           <RequireAuth>
             <ClassSchedulesList />
@@ -218,7 +218,7 @@ export function AppRoutes(): JSX.Element {
         }
       />
       <Route
-        path="my-tutoring-tutors/:id1/class-schedules/:id2"
+        path="my-student-tutorings/:id1/class-schedules/:id2"
         element={
           <RequireAuth>
             <ClassScheduleEdit />
@@ -226,7 +226,7 @@ export function AppRoutes(): JSX.Element {
         }
       />
       <Route
-        path="my-tutoring-tutors/:id/class-schedules/new"
+        path="my-student-tutorings/:id/class-schedules/new"
         element={
           <RequireAuth>
             <ClassScheduleCreate />

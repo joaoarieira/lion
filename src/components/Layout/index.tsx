@@ -132,7 +132,7 @@ export const Layout = ({ children }: ILayoutProps): JSX.Element => {
       {
         text: 'Minhas monitorias',
         icon: <HistoryEduOutlined />,
-        path: '/my-tutoring-tutors',
+        path: '/my-student-tutorings',
       },
     ],
     []

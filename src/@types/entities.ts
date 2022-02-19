@@ -75,7 +75,7 @@ interface IStudentTutoringTutorRelations {
   student_tutoring?: IStudentTutoring;
   tutor?: IUser;
   professor?: IUser;
-  class_schedules?: IClassSchedules[];
+  class_schedules?: IClassSchedule[];
 }
 
 export interface IStudentTutoringProgram
@@ -92,7 +92,7 @@ interface IStudentTutoringProgramRelations {
   student_tutoring?: IStudentTutoring;
 }
 
-export interface IClassSchedules extends IClassSchedulesRelations {
+export interface IClassSchedule extends IClassScheduleRelations {
   id: uuid;
   student_tutoring_tutor_id: uuid;
   day_of_the_week: number;
@@ -105,6 +105,6 @@ export interface IClassSchedules extends IClassSchedulesRelations {
   updated_at: string;
 }
 
-interface IClassSchedulesRelations {
+interface IClassScheduleRelations {
   student_tutoring_tutor: IStudentTutoringTutor;
 }
