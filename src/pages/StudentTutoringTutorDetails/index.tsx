@@ -72,14 +72,6 @@ export function StudentTutoringTutorDetails(): JSX.Element {
         alignContent="center"
         sx={{ maxWidth: '400px', margin: 'auto', rowGap: '1rem' }}
       >
-        {/*         
-        <Grid item xs={12} display="flex" justifyContent="center">
-          <Typography variant="h6" component="h1">
-            Detalhes
-          </Typography>
-        </Grid> 
-        */}
-
         <Grid item xs={12}>
           <CourseNamePaper variant="outlined">
             <Box sx={{ p: '0.5rem' }}>

@@ -32,6 +32,16 @@ export function dayNumberToString(number: number): string {
   return '';
 }
 
+export const daysOfTheWeekOptions = [
+  { value: 0, name: 'Domingo' },
+  { value: 1, name: 'Segunda-feira' },
+  { value: 2, name: 'Terça-feira' },
+  { value: 3, name: 'Quarta-feira' },
+  { value: 4, name: 'Quinta-feira' },
+  { value: 5, name: 'Sexta-feira' },
+  { value: 6, name: 'Sábado' },
+];
+
 export const roleNames = {
   admin: 'admin',
   professor: 'professor',
