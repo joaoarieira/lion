@@ -58,7 +58,6 @@ export interface IStudentTutoring extends IStudentTutoringRelations {
 }
 
 interface IStudentTutoringRelations {
-  professor?: IUser;
   student_tutoring_tutors?: IUser[];
   student_tutoring_programs?: IStudentTutoringProgram[];
 }

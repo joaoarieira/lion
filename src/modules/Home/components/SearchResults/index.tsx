@@ -74,8 +74,7 @@ export function SearchResults(): JSX.Element {
                       <Grid item xs={12}>
                         <Typography variant="caption">
                           {`Prof.: ${
-                            studentTutoringTutor.student_tutoring?.professor
-                              ?.name ?? ''
+                            studentTutoringTutor.professor?.name ?? ''
                           }`}
                         </Typography>
                       </Grid>

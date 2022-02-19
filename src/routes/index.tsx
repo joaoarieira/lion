@@ -43,6 +43,10 @@ const StudentTutoringTutorsList = lazy(
   () =>
     import('../modules/StudentTutoringTutors/pages/StudentTutoringTutorsList')
 );
+const LinkedStudentTutoringList = lazy(
+  () =>
+    import('../modules/StudentTutoringTutors/pages/LinkedStudentTutoringList')
+);
 const StudentTutoringTutorCreate = lazy(
   () =>
     import('../modules/StudentTutoringTutors/pages/StudentTutoringTutorCreate')
@@ -50,6 +54,15 @@ const StudentTutoringTutorCreate = lazy(
 const StudentTutoringTutorEdit = lazy(
   () =>
     import('../modules/StudentTutoringTutors/pages/StudentTutoringTutorEdit')
+);
+const ClassSchedulesList = lazy(
+  () => import('../modules/ClassSchedules/pages/ClassSchedulesList')
+);
+const ClassScheduleCreate = lazy(
+  () => import('../modules/ClassSchedules/pages/ClassScheduleCreate')
+);
+const ClassScheduleEdit = lazy(
+  () => import('../modules/ClassSchedules/pages/ClassScheduleEdit')
 );
 
 export function AppRoutes(): JSX.Element {
@@ -184,6 +197,39 @@ export function AppRoutes(): JSX.Element {
         element={
           <RequireAuth>
             <StudentTutoringTutorCreate />
+          </RequireAuth>
+        }
+      />
+
+      <Route
+        path="my-tutoring-tutors"
+        element={
+          <RequireAuth>
+            <LinkedStudentTutoringList />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="my-tutoring-tutors/:id/class-schedules"
+        element={
+          <RequireAuth>
+            <ClassSchedulesList />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="my-tutoring-tutors/:id1/class-schedules/:id2"
+        element={
+          <RequireAuth>
+            <ClassScheduleEdit />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="my-tutoring-tutors/:id/class-schedules/new"
+        element={
+          <RequireAuth>
+            <ClassScheduleCreate />
           </RequireAuth>
         }
       />

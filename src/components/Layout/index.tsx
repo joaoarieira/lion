@@ -130,9 +130,9 @@ export const Layout = ({ children }: ILayoutProps): JSX.Element => {
   const studentTutorMenuItems: IItem[] = useMemo(
     () => [
       {
-        text: 'Monitorias',
+        text: 'Minhas monitorias',
         icon: <HistoryEduOutlined />,
-        path: '/student-tutoring-tutors',
+        path: '/my-tutoring-tutors',
       },
     ],
     []

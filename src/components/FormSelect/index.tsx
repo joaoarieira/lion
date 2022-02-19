@@ -41,7 +41,6 @@ export function FormSelect({
         label={label}
         value={formAttributes.values[name]}
         error={isErroed}
-        defaultValue=""
         {...selectProps}
       />
       <FormHelperText error={isErroed}>

@@ -124,7 +124,7 @@ export function StudentTutoringTutorDetails(): JSX.Element {
               />
             }
             label="Prof."
-            value={studentTutoringTutor?.student_tutoring?.professor?.name}
+            value={studentTutoringTutor?.professor?.name}
           />
           <SingleInfo
             icon={
@@ -134,7 +134,7 @@ export function StudentTutoringTutorDetails(): JSX.Element {
               />
             }
             label="Email"
-            value={studentTutoringTutor?.student_tutoring?.professor?.email}
+            value={studentTutoringTutor?.professor?.email}
             isValueEmail
           />
         </InfoContainer>
