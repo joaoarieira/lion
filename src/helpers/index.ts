@@ -1,11 +1,11 @@
 import { format, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
-export function isUUID(uuid: string | undefined): boolean {
+export function isUUID(uuid: string | undefined | null): boolean {
   const regexExp =
     /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/gi;
 
-  if (uuid !== undefined) return regexExp.test(uuid);
+  if (uuid) return regexExp.test(uuid);
 
   return false;
 }

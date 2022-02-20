@@ -1,16 +1,17 @@
+import { useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Box, Button, Grid } from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { SearchOutlined } from '@mui/icons-material';
 
 import { FormInput } from '../../../../components/FormInput';
-import { useNavigate } from 'react-router-dom';
 
 export function SearchForm(): JSX.Element {
   const navigate = useNavigate();
 
   const validationSchema = Yup.object().shape({
-    search: Yup.string(),
+    query: Yup.string(),
   });
 
   const searchForm = useFormik({
@@ -26,6 +27,11 @@ export function SearchForm(): JSX.Element {
     },
   });
 
+  const handleChangeSearch = useCallback(() => {
+    searchForm.resetForm();
+    navigate('/search-by-program');
+  }, [navigate, searchForm]);
+
   return (
     <Box flexGrow={1}>
       <form
@@ -37,7 +43,7 @@ export function SearchForm(): JSX.Element {
           alignItems="center"
           justifyContent="center"
           alignContent="center"
-          spacing={5}
+          rowSpacing={5}
           style={{ minHeight: 'calc(100vh - 130px)', maxWidth: '400px' }}
         >
           <Grid item xs={12}>
@@ -60,6 +66,14 @@ export function SearchForm(): JSX.Element {
             >
               Pesquisar
             </Button>
+          </Grid>
+
+          <Grid item xs={12}>
+            <Box display="flex" justifyContent="flex-end">
+              <Button type="button" onClick={handleChangeSearch}>
+                Buscar por cursos
+              </Button>
+            </Box>
           </Grid>
         </Grid>
       </form>

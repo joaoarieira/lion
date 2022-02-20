@@ -150,7 +150,7 @@ export function StudentTutoringEdit(): JSX.Element {
     async (values: IStudentTutoringEditValues) => {
       if (authenticated) {
         if (userAuthenticated.role === roleNames.admin) {
-          await putStudentTutoring(`${id}oi`, preparePutValues(values));
+          await putStudentTutoring(id, preparePutValues(values));
 
           if (responseStudentTutoring.ok) {
             const responseData =

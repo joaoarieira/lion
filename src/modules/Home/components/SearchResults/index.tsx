@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import useFetch from 'use-http';
 
 import { IStudentTutoringTutor } from '../../../../@types/entities';
+import { isUUID } from '../../../../helpers';
 import { DetailsAction } from './styles';
 
 export function SearchResults(): JSX.Element {
@@ -17,8 +18,8 @@ export function SearchResults(): JSX.Element {
 
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const query = searchParams.get('query');
+  // TODO: tratar do parâmetro query
+  const program_id = searchParams.get('program_id');
 
   const { get, response } = useFetch();
 
@@ -30,15 +31,18 @@ export function SearchResults(): JSX.Element {
   );
 
   const fetchStudentTutoringsTutors = useCallback(async () => {
-    await get('/student-tutoring-tutors');
+    if (isUUID(program_id)) {
+      await get(`/student-tutoring-tutors?program_id=${program_id}`);
+    } else {
+      await get('/student-tutoring-tutors');
+    }
 
     if (response.ok) {
       setStudentTutoringTutors(response.data);
     } else {
       toast.error('Falha ao pesquisar. Tente novamente mais tarde.');
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [get, JSON.stringify(response.data), response.ok]);
+  }, [get, program_id, response]);
 
   useEffect(() => {
     fetchStudentTutoringsTutors();

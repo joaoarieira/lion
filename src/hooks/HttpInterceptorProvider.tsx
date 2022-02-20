@@ -39,7 +39,14 @@ export function HttpInterceptorProvider({
   } as IncomingOptions;
 
   return (
-    <Provider url={process.env.REACT_APP_BACKEND_URL} options={optionsProvider}>
+    <Provider
+      url={
+        process.env.REACT_APP_NODE_ENV === 'production'
+          ? process.env.REACT_APP_BACKEND_URL
+          : process.env.REACT_APP_BACKEND_URL_DEV
+      }
+      options={optionsProvider}
+    >
       {children}
     </Provider>
   );

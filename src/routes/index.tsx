@@ -3,6 +3,9 @@ import { Route, Routes } from 'react-router-dom';
 
 const RequireAuth = lazy(() => import('../components/RequireAuth'));
 const Home = lazy(() => import('../modules/Home'));
+const SearchByProgramForm = lazy(
+  () => import('../modules/Home/components/SearchByProgramForm')
+);
 const SearchResults = lazy(
   () => import('../modules/Home/components/SearchResults')
 );
@@ -69,6 +72,7 @@ export function AppRoutes(): JSX.Element {
   return (
     <Routes>
       <Route index element={<Home />} />
+      <Route path="search-by-program" element={<SearchByProgramForm />} />
       <Route path="search" element={<SearchResults />} />
       <Route path="signin" element={<SignIn />} />
       <Route path="signout" element={<SignOut />} />

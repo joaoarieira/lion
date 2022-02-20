@@ -49,10 +49,15 @@ export const AuthProvider = ({
 
   const navigate = useNavigate();
 
-  const { post, response } = useFetch(process.env.REACT_APP_BACKEND_URL, {
-    suspense: true,
-    cachePolicy: CachePolicies.NO_CACHE,
-  });
+  const { post, response } = useFetch(
+    process.env.REACT_APP_NODE_ENV === 'production'
+      ? process.env.REACT_APP_BACKEND_URL
+      : process.env.REACT_APP_BACKEND_URL_DEV,
+    {
+      suspense: true,
+      cachePolicy: CachePolicies.NO_CACHE,
+    }
+  );
 
   const handleLogin = useCallback(
     async (username: string, password: string): Promise<boolean> => {
