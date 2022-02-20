@@ -15,6 +15,7 @@ export function HttpInterceptorProvider({
 
   const optionsProvider = {
     cachePolicy: CachePolicies.NO_CACHE,
+    suspense: true,
     interceptors: {
       request: ({ options, url }) => {
         if (authenticated) {

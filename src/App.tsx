@@ -7,11 +7,12 @@ import HttpInterceptorProvider from './hooks/HttpInterceptorProvider';
 import Routes from './routes';
 import { Layout } from './components/Layout';
 import AuthProvider from './hooks/AuthContext';
+import { LoadingSuspense } from './components/LoadingSuspense';
 
 function App(): JSX.Element {
   return (
     <ThemeProvider theme={theme}>
-      <Suspense fallback={<div>Carregando...</div>}>
+      <Suspense fallback={<LoadingSuspense open />}>
         <AuthProvider>
           <HttpInterceptorProvider>
             <Layout>
