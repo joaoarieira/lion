@@ -18,8 +18,9 @@ export function SearchResults(): JSX.Element {
 
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  // TODO: tratar do parâmetro query
+
   const program_id = searchParams.get('program_id');
+  const query = searchParams.get('query');
 
   const { get, response } = useFetch();
 
@@ -34,7 +35,7 @@ export function SearchResults(): JSX.Element {
     if (isUUID(program_id)) {
       await get(`/student-tutoring-tutors?program_id=${program_id}`);
     } else {
-      await get('/student-tutoring-tutors');
+      await get(`/student-tutoring-tutors?query=${query}`);
     }
 
     if (response.ok) {
@@ -42,7 +43,7 @@ export function SearchResults(): JSX.Element {
     } else {
       toast.error('Falha ao pesquisar. Tente novamente mais tarde.');
     }
-  }, [get, program_id, response]);
+  }, [get, program_id, query, response.data, response.ok]);
 
   useEffect(() => {
     fetchStudentTutoringsTutors();
