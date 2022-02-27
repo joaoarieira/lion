@@ -188,7 +188,13 @@ export const Layout = ({ children }: ILayoutProps): JSX.Element => {
               color: grey[700],
             }}
           />
-          <Select style={{ width: '100%', height: '40px' }} defaultValue="">
+          <Select
+            style={{ width: '100%', height: '40px' }}
+            defaultValue={
+              campuses.find((campus) => campus.name === 'Rio Paranaíba')?.id ??
+              ''
+            }
+          >
             {/* TODO: colocar o campus escolhido no localStorage */}
             {campuses.map((campus) => (
               <MenuItem key={campus.id} value={campus.id}>

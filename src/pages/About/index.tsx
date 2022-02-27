@@ -1,5 +1,4 @@
 import { Box, Grid, Link, Typography } from '@mui/material';
-import { useCallback } from 'react';
 import CrudHeader from '../../components/CrudHeader';
 
 export function About(): JSX.Element {
