@@ -14,11 +14,13 @@ import useFetch, { CachePolicies } from 'use-http';
 import jwt_decode from 'jwt-decode';
 
 interface IJwtDecodedInfos {
+  sub: string; // id do usuário
   username: string;
   userrole: string;
 }
 
 interface IUser {
+  id: string;
   name: string;
   role: string;
 }
@@ -43,6 +45,7 @@ export const AuthProvider = ({
   const [authenticated, setAuthenticated] = useState(false);
   const [token, setToken] = useState('');
   const [userAuthenticated, setUserAuthenticated] = useState<IUser>({
+    id: '',
     name: '',
     role: '',
   });
@@ -72,6 +75,7 @@ export const AuthProvider = ({
         ) as IJwtDecodedInfos;
 
         setUserAuthenticated({
+          id: jwtDecoded.sub,
           name: jwtDecoded.username,
           role: jwtDecoded.userrole,
         });
@@ -108,6 +112,7 @@ export const AuthProvider = ({
       setAuthenticated(true);
       setToken(newToken);
       setUserAuthenticated({
+        id: jwtDecoded.sub,
         name: jwtDecoded.username,
         role: jwtDecoded.userrole,
       });

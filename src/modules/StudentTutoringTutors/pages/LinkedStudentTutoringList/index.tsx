@@ -35,7 +35,7 @@ export function LinkedStudentTutoringList(): JSX.Element {
   const fetchStudentTutoringTutorsData = useCallback(async () => {
     if (authenticated) {
       if (userAuthenticated.role === roleNames.student_tutor) {
-        await get();
+        await get(`?tutor_id=${userAuthenticated.id}`);
 
         if (response.ok) {
           setStudentTutoringTutors(response.data);
@@ -46,7 +46,13 @@ export function LinkedStudentTutoringList(): JSX.Element {
         }
       }
     }
-  }, [authenticated, get, response, userAuthenticated.role]);
+  }, [
+    authenticated,
+    get,
+    response,
+    userAuthenticated.id,
+    userAuthenticated.role,
+  ]);
 
   useEffect(() => {
     fetchStudentTutoringTutorsData();
