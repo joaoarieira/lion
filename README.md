@@ -1,4 +1,4 @@
-## Access it working here:
+## Feel free to use it here
 https://lion-front-end.herokuapp.com/
 
 ## Getting Started with Create React App
