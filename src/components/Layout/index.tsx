@@ -194,8 +194,9 @@ export const Layout = ({ children }: ILayoutProps): JSX.Element => {
               campuses.find((campus) => campus.name === 'Rio Paranaíba')?.id ??
               ''
             }
+            disabled
           >
-            {/* TODO: colocar o campus escolhido no localStorage */}
+            {/* TODO: colocar o campus escolhido no localStorage e deixar funcionando */}
             {campuses.map((campus) => (
               <MenuItem key={campus.id} value={campus.id}>
                 {campus.name}
