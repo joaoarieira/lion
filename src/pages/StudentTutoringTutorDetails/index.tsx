@@ -142,94 +142,95 @@ export function StudentTutoringTutorDetails(): JSX.Element {
         {studentTutoringTutor?.class_schedules &&
           studentTutoringTutor.class_schedules.length > 0 && (
             <InfoContainer item xs={12}>
-              <Paper variant="outlined" sx={{ margin: '0 1rem' }}>
-                <SchedulesBox>
-                  {studentTutoringTutor.class_schedules.map(
-                    (class_schedule) => (
-                      <InfoContainer key={class_schedule.id} item xs={12}>
+              {studentTutoringTutor.class_schedules.map((class_schedule) => (
+                <Paper
+                  key={class_schedule.id}
+                  variant="outlined"
+                  sx={{ margin: '0.5rem 1rem' }}
+                >
+                  <SchedulesBox>
+                    <InfoContainer item xs={12}>
+                      <SingleInfo
+                        icon={
+                          <DateRangeOutlined
+                            fontSize="small"
+                            sx={{ color: grey[700] }}
+                          />
+                        }
+                        label="Dia"
+                        value={dayNumberToString(
+                          class_schedule.day_of_the_week
+                        )}
+                      />
+
+                      <SingleInfo
+                        icon={
+                          <LocationOnOutlined
+                            fontSize="small"
+                            sx={{ color: grey[700] }}
+                          />
+                        }
+                        label="Local"
+                        value={class_schedule.meeting_place}
+                      />
+
+                      {class_schedule.meeting_url && (
                         <SingleInfo
                           icon={
-                            <DateRangeOutlined
+                            <HeadsetMicOutlined
                               fontSize="small"
                               sx={{ color: grey[700] }}
                             />
                           }
-                          label="Dia"
-                          value={dayNumberToString(
-                            class_schedule.day_of_the_week
-                          )}
+                          label="Link de acesso"
+                          value={class_schedule.meeting_url}
+                          isValueURL
                         />
+                      )}
 
+                      {class_schedule.starts_at && !class_schedule.ends_at && (
                         <SingleInfo
                           icon={
-                            <LocationOnOutlined
+                            <WatchLaterOutlined
                               fontSize="small"
                               sx={{ color: grey[700] }}
                             />
                           }
-                          label="Local"
-                          value={class_schedule.meeting_place}
+                          label="Começa"
+                          value={class_schedule.starts_at}
                         />
+                      )}
 
-                        {class_schedule.meeting_url && (
-                          <SingleInfo
-                            icon={
-                              <HeadsetMicOutlined
-                                fontSize="small"
-                                sx={{ color: grey[700] }}
-                              />
-                            }
-                            label="Link de acesso"
-                            value={class_schedule.meeting_url}
-                            isValueURL
-                          />
-                        )}
-
-                        {class_schedule.starts_at &&
-                          !class_schedule.ends_at && (
-                            <SingleInfo
-                              icon={
-                                <WatchLaterOutlined
-                                  fontSize="small"
-                                  sx={{ color: grey[700] }}
-                                />
-                              }
-                              label="Começa"
-                              value={class_schedule.starts_at}
+                      {class_schedule.starts_at && class_schedule.ends_at && (
+                        <SingleInfo
+                          icon={
+                            <WatchLaterOutlined
+                              fontSize="small"
+                              sx={{ color: grey[700] }}
                             />
-                          )}
+                          }
+                          label="Período"
+                          value={`${class_schedule.starts_at} ~ ${class_schedule.ends_at}`}
+                        />
+                      )}
 
-                        {class_schedule.starts_at && class_schedule.ends_at && (
-                          <SingleInfo
-                            icon={
-                              <WatchLaterOutlined
-                                fontSize="small"
-                                sx={{ color: grey[700] }}
-                              />
-                            }
-                            label="Período"
-                            value={`${class_schedule.starts_at} ~ ${class_schedule.ends_at}`}
-                          />
-                        )}
-
-                        {class_schedule.note && (
-                          <SingleInfo
-                            icon={
-                              <NoteAltOutlined
-                                fontSize="small"
-                                sx={{ color: grey[700] }}
-                              />
-                            }
-                            label="Obervação"
-                            value={`- ${class_schedule.note}`}
-                            isValueLarge
-                          />
-                        )}
-                      </InfoContainer>
-                    )
-                  )}
-                </SchedulesBox>
-              </Paper>
+                      {class_schedule.note && (
+                        <SingleInfo
+                          icon={
+                            <NoteAltOutlined
+                              fontSize="small"
+                              sx={{ color: grey[700] }}
+                            />
+                          }
+                          label="Obervação"
+                          value={`- ${class_schedule.note}`}
+                          isValueLarge
+                        />
+                      )}
+                    </InfoContainer>
+                  </SchedulesBox>
+                </Paper>
+              ))}
             </InfoContainer>
           )}
       </Grid>
