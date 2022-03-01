@@ -56,8 +56,7 @@ export function StudentTutoringTutorDetails(): JSX.Element {
     } else {
       navigate('/404');
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [get, id, JSON.stringify(response.data), response.ok]);
+  }, [get, id, navigate, response]);
 
   useEffect(() => {
     fetchStudentTutoringTutor();

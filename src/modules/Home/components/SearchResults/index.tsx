@@ -43,7 +43,7 @@ export function SearchResults(): JSX.Element {
     } else {
       toast.error('Falha ao pesquisar. Tente novamente mais tarde.');
     }
-  }, [get, program_id, query, response.data, response.ok]);
+  }, [get, program_id, query, response]);
 
   useEffect(() => {
     fetchStudentTutoringsTutors();
